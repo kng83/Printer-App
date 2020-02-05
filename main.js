@@ -1,51 +1,46 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
-const url = require("url");
-const path = require("path");
 
+
+
+//** Life electron reload */
 require('electron-reload')(__dirname, {
-    electron: require("electron")
+    electron: require(`${__dirname}/node_modules/electron`)
 });
 
-let mainWindow
-// sloem
-function createWindow() {
-    mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        webPreferences: {
-            nodeIntegration: true
-        }
-    })
+function createWindow () {
+    // Stwórz okno przeglądarki.
+    const win = new BrowserWindow({
+      width: 800,
+      height: 600,
+      webPreferences: {
+        nodeIntegration: true
+      }
+    });
+  
+    // and load the index.html of the app. ///
+    win.loadFile('./dist/Printer-App/index.html')
+  
+    // Otwórz Narzędzia Deweloperskie.
+    win.webContents.openDevTools()
+  }
+  //so
 
-    mainWindow.loadURL(
-        url.format({
-            pathname: path.join(__dirname, `/dist/Printer-App/index.html`),
-            protocol: "file:",
-            slashes: true
-        })
-    );
-    //      mainWindow.loadUrl(`file://${__dirname}/dist/Printer-App/index.html`);
-
-    // Open the DevTools.
-    mainWindow.webContents.openDevTools()
-
-    mainWindow.on('closed', function () {
-        mainWindow = null
-    })
-}
-
-app.on('ready', createWindow)
-
-app.on('window-all-closed', function () {
-    if (process.platform !== 'darwin') app.quit()
-})
-
-app.on('activate', function () {
-    if (mainWindow === null) createWindow()
-})
-
-
+  app.whenReady().then(createWindow)
+  
+  // Quit when all windows are closed.
+  app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+      app.quit()
+    }
+  })
+  
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow()
+    }
+  })
+  
 ipcMain.on('openModal', (event, arg) => {
-    console.log(arg, 'some textsssmmsssss');
+    console.log(arg, 'some ss');
 })
 

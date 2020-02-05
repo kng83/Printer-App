@@ -25,4 +25,4 @@ export class AppComponent {
   openModal() {
     this.ipc.send("openModal",{cat:"bobo"});
   }
-}
+}//
