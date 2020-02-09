@@ -10,7 +10,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "start:angular": "ng build --watch --base-href",
-    "start:electron": "electron ."
+    "start:electron": "electron  ./src_electron/main.js"
   },
   "private": true,
   "dependencies": {

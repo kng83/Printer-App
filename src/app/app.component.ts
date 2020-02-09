@@ -23,6 +23,6 @@ export class AppComponent {
   }
 
   openModal() {
-    this.ipc.send("openModal",{cat:"bobo"});
+    this.ipc.send("openModal",{cat:"bobo 1"});
   }
 }//
