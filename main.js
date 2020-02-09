@@ -1,6 +1,8 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
 
-
+const electron = require('electron');
+const app = electron.app;
+const BrowserWindow = electron.BrowserWindow;
+const ipcMain = electron.ipcMain;
 
 //** Life electron reload */
 require('electron-reload')(__dirname, {
@@ -23,7 +25,7 @@ function createWindow () {
     // Otwórz Narzędzia Deweloperskie.
     win.webContents.openDevTools()
   }
-  //so
+  
 
   app.whenReady().then(createWindow)
   
@@ -41,6 +43,6 @@ function createWindow () {
   })
   
 ipcMain.on('openModal', (event, arg) => {
-    console.log(arg, 'some ss');
+    console.log(arg, 'some snake 8');
 })
 
