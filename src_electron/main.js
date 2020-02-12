@@ -5,7 +5,7 @@ const BrowserWindow = electron.BrowserWindow;
 const ipcMain = electron.ipcMain;
 const path = require('path');
 
-
+console.log(module.path,'module parent')
 console.log(__dirname);
 function createWindow() {
   // Stwórz okno przeglądarki.
@@ -21,7 +21,6 @@ function createWindow() {
   console.log(__dirname);
   //** Life electron reload */
   const mainDirName = path.join(__dirname,'..');
-  const thisDirName = __dirname;
   console.log(mainDirName);
   let pathToElectron = path.join(`${mainDirName}`,'node_modules','electron');
   console.log(pathToElectron);
@@ -67,3 +66,4 @@ ipcMain.on('openModal', (event, arg) => {
   console.log(arg, 'some snake 2s7sssssd');
 })
 
+//
