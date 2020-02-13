@@ -17,22 +17,18 @@ function createWindow() {
      // allowRunningInsecureContent: true
     }
   });
-
-  console.log(__dirname);
+//
   //** Life electron reload */
   const mainDirName = path.join(__dirname,'..');
-  console.log(mainDirName);
-  let pathToElectron = path.join(`${mainDirName}`,'node_modules','electron');
-  console.log(pathToElectron);
-
+  console.log(process.argv,'some argv')
 
   require('electron-reload')(__dirname, {
   
-  //  electron: require(`${mainDirName}/node_modules/electron`)
-   // electron: pathToElectron
-     electron: path.join(`${mainDirName}`, 'node_modules/.bin/electron.cmd')
+    electron: require(`${mainDirName}/node_modules/electron`),
+     hardResetMethod: 'exit',
+     argv:[process.argv[1]] //here is passed './src_electron/main.js
   })
-
+ //
   // and load the index.html of the app. ///
      win.loadFile(path.join(mainDirName,'dist/Printer-App/index.html'));
 
@@ -42,6 +38,7 @@ function createWindow() {
   //   slashes: true
   // }));
 
+  //
   // Otwórz Narzędzia Deweloperskie.
   win.webContents.openDevTools()
 }
@@ -63,7 +60,7 @@ app.on('activate', () => {
 })
 
 ipcMain.on('openModal', (event, arg) => {
-  console.log(arg, 'some snake 2s7sssssd');
+  console.log(arg, 'some snake ');
 })
 
 //
