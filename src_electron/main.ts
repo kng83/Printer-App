@@ -1,12 +1,8 @@
 
-const electron = require('electron');
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
-const ipcMain = electron.ipcMain;
-const path = require('path');
+import { app, BrowserWindow, ipcMain} from 'electron';
+import * as path from 'path';
 
-console.log(module.path,'module parent')
-console.log(__dirname);
+
 function createWindow() {
   // Stwórz okno przeglądarki.
   const win = new BrowserWindow({
@@ -39,7 +35,7 @@ function createWindow() {
   // }));
 
   //
-  // Otwórz Narzędzia Deweloperskie.
+
   win.webContents.openDevTools()
 }
 
@@ -60,7 +56,7 @@ app.on('activate', () => {
 })
 
 ipcMain.on('openModal', (event, arg) => {
-  console.log(arg, 'some snake is fund  ');
+  console.log(arg, 'some snssake is fund homse and 433 ');
 })
 
 //
