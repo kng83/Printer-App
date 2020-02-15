@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var electron_1 = require("electron");
 var path = require("path");
+var some_class_1 = require("./some.class");
+console.log(new some_class_1.SomeClass().getPoint());
 function createWindow() {
     // Stwórz okno przeglądarki.
     var win = new electron_1.BrowserWindow({
@@ -18,6 +20,7 @@ function createWindow() {
     require('electron-reload')(__dirname, {
         electron: require(mainDirName + "/node_modules/electron"),
         hardResetMethod: 'quit',
+        forceHardReset: true,
         argv: [process.argv[1]] //here is passed path './src_electron/main.js
     });
     // and load the index.html of the app. ///
