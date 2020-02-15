@@ -43,7 +43,7 @@ electron_1.app.on('activate', function () {
     }
 });
 electron_1.ipcMain.on('openModal', function (event, arg) {
-    console.log(arg, 'some snssake is fund homse and 433 ');
+    console.log(arg, 'some snake was found in srg ');
 });
 //
 //# sourceMappingURL=main.js.map
