@@ -60,7 +60,7 @@ app.on('activate', () => {
 })
 
 ipcMain.on('openModal', (event, arg) => {
-  console.log(arg, 'some snake is fund and k ');
+  console.log(arg, 'some snake is fund and kd ');
 })
 
 //
