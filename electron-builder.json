@@ -1,0 +1,42 @@
+{
+  "productName": "angular-electron",
+  "directories": {
+    "output": "release/"
+  },
+    "files": [
+        "!node_modules",
+        "!dist/out-tsc",
+        "**/*",
+        "!**/*.ts",
+        "!*.code-workspace",
+        "!LICENSE.md",
+        "!package.json",
+        "!package-lock.json",
+        "!src/",
+        "!e2e/",
+        "!hooks/",
+        "!angular.json",
+        "!_config.yml",
+        "!karma.conf.js",
+        "!tsconfig.json",
+        "!tslint.json"
+    ],
+  "win": {
+    
+    "target": [
+      "portable"
+    ]
+  },
+  "mac": {
+  
+    "target": [
+      "dmg"
+    ]
+  },
+  "linux": {
+ 
+    "target": [
+      "AppImage"
+    ]
+  }
+}

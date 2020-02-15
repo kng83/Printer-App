@@ -1,19 +1,22 @@
 {
   "name": "printer-app",
   "version": "0.0.0",
-  "main": "main.js",
+  "main": "./dist_electron/main.js",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "ng:serve": "ng serve",
+    "build": "npm run build:electron && ng build --prod --base-href",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "start:angular": "ng build --watch --base-href",
-    "watch:electron": "electron  ./dist_electron/main.js",
-    "tsc:compile": "tsc -w -p tsconfig.electron.json",
-    "start:electron": "npm-run-all -p tsc:compile watch:electron"
-
+    "build:angular": "ng build --prod --base-href",
+    "build:electron": "tsc -p tsconfig.electron.json",
+    "tsc-electron:compile": "tsc -w -p tsconfig.electron.json",
+    "watch:electron": "electron  ./dist_electron/main.js --serve",
+    "dev:angular": "ng serve",
+    "dev:electron": "npm-run-all -p tsc-electron:compile watch:electron",
+    "dev:all": "npm-run-all -p ng:serve  tsc-electron:compile watch:electron",
+    "electron:windows": "npm run build && electron-builder build --windows"
   },
   "private": true,
   "dependencies": {
@@ -40,6 +43,7 @@
     "@types/node": "^12.11.1",
     "codelyzer": "^5.1.2",
     "electron": "^8.0.0",
+    "electron-builder": "^22.3.2",
     "electron-reload": "^1.5.0",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
