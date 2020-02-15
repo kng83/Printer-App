@@ -21,11 +21,11 @@ function createWindow() {
   //** Life electron reload */
   const mainDirName = path.join(__dirname,'..');
   console.log(process.argv,'some argv')
-
+  
   require('electron-reload')(__dirname, {
   
      electron: require(`${mainDirName}/node_modules/electron`),
-     hardResetMethod: 'exit',
+     hardResetMethod: 'quit',
      argv:[process.argv[1]] //here is passed path './src_electron/main.js
   })
 
@@ -60,7 +60,7 @@ app.on('activate', () => {
 })
 
 ipcMain.on('openModal', (event, arg) => {
-  console.log(arg, 'some snake is fund and kd ');
+  console.log(arg, 'some snake is fund  ');
 })
 
 //
