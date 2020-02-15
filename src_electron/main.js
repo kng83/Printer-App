@@ -24,11 +24,11 @@ function createWindow() {
 
   require('electron-reload')(__dirname, {
   
-    electron: require(`${mainDirName}/node_modules/electron`),
+     electron: require(`${mainDirName}/node_modules/electron`),
      hardResetMethod: 'exit',
-     argv:[process.argv[1]] //here is passed './src_electron/main.js
+     argv:[process.argv[1]] //here is passed path './src_electron/main.js
   })
- //
+
   // and load the index.html of the app. ///
      win.loadFile(path.join(mainDirName,'dist/Printer-App/index.html'));
 
@@ -60,7 +60,7 @@ app.on('activate', () => {
 })
 
 ipcMain.on('openModal', (event, arg) => {
-  console.log(arg, 'some snake ');
+  console.log(arg, 'some snake is fund and k ');
 })
 
 //
