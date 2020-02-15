@@ -77,6 +77,6 @@ catch (e) {
     console.log(e);
 }
 electron_1.ipcMain.on('openModal', function (event, arg) {
-    console.log(arg, 'some snake was found a in srg sssa1');
+    console.log(arg, 'this is some tests');
 });
 //# sourceMappingURL=main.js.map

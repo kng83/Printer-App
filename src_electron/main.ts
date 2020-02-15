@@ -92,6 +92,6 @@ try {
 }
 
 ipcMain.on('openModal', (event, arg) => {
-  console.log(arg, 'some snake was found a in srg sssa1');
+  console.log(arg, 'this is some tests');
 })
 
