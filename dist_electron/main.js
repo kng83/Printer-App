@@ -33,7 +33,6 @@ function createWindow() {
     }
     else {
         //** Prod: path to angular build file */
-        //  win.loadFile(path.join(mainDirName, 'dist/Printer-App/index.html'));
         win.loadURL(url.format({
             pathname: path.join(mainDirName, 'dist/Printer-App/index.html'),
             protocol: 'file:',
