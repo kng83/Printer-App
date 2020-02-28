@@ -18,8 +18,13 @@ Menu.setApplicationMenu(menu);
 
 
 // ** Function which creates window
+<<<<<<< HEAD
 function createWindow(): BrowserWindow {
   // Stwórz okno przeglądarki.
+=======
+function createWindow():BrowserWindow {
+  // ** Make  window
+>>>>>>> a707808b1f15d03ddcdff903215f6282410cb6e6
   win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -30,7 +35,7 @@ function createWindow(): BrowserWindow {
   });
 
 
-  //** Life electron reload */
+  //** One dir up for handling path to node_modules*/
   const mainDirName = path.join(__dirname, '..');
 
   //** Serving dev or production mode */
@@ -39,14 +44,17 @@ function createWindow(): BrowserWindow {
       electron: require(`${mainDirName}/node_modules/electron`),
       hardResetMethod: 'quit',
       forceHardReset: true,
-      argv: [process.argv[1], process.argv[2]] //here is passed path './src_electron/main.js [1] , serve[2]
+      argv: [process.argv[1], process.argv[2]] //here is passed path './src_electron/main.js [1] , option -serve[2]
     })
 
     //** DEV: Angular view from serve mode */
     win.loadURL('http://localhost:4200');
   } else {
     //** Prod: path to angular build file */
+<<<<<<< HEAD
     //  win.loadFile(path.join(mainDirName, 'dist/Printer-App/index.html'));
+=======
+>>>>>>> a707808b1f15d03ddcdff903215f6282410cb6e6
     win.loadURL(url.format({
       pathname: path.join(mainDirName, 'dist/Printer-App/index.html'),
       protocol: 'file:',
@@ -98,6 +106,6 @@ try {
 }
 
 ipcMain.on('openModal', (event, arg) => {
-  console.log(arg, 'some snake was found a in srg sssa1');
+  console.log(arg, 'this is some tests');
 })
 

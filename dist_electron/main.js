@@ -37,7 +37,6 @@ function createWindow() {
     }
     else {
         //** Prod: path to angular build file */
-        //  win.loadFile(path.join(mainDirName, 'dist/Printer-App/index.html'));
         win.loadURL(url.format({
             pathname: path.join(mainDirName, 'dist/Printer-App/index.html'),
             protocol: 'file:',
@@ -81,6 +80,6 @@ catch (e) {
     console.log(e);
 }
 electron_1.ipcMain.on('openModal', function (event, arg) {
-    console.log(arg, 'some snake was found a in srg sssa1');
+    console.log(arg, 'this is some tests');
 });
 //# sourceMappingURL=main.js.map

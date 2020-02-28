@@ -4,19 +4,18 @@
   "main": "./dist_electron/main.js",
   "scripts": {
     "ng": "ng",
-    "ng:serve": "ng serve",
-    "build": "npm run build:electron && ng build --prod --base-href",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:angular": "ng build --prod --base-href",
-    "build:electron": "tsc -p tsconfig.electron.json",
     "tsc-electron:compile": "tsc -w -p tsconfig.electron.json",
     "watch:electron": "electron  ./dist_electron/main.js --serve",
     "dev:angular": "ng serve",
     "dev:electron": "npm-run-all -p tsc-electron:compile watch:electron",
-    "dev:all": "npm-run-all -p ng:serve  tsc-electron:compile watch:electron",
-    "electron:windows": "npm run build && electron-builder build --windows"
+    "dev:all": "npm-run-all -p dev:angular  tsc-electron:compile watch:electron",
+    "build:angular":"ng build --prod --base-href",
+    "build:electron": "tsc -p tsconfig.electron.json",
+    "build:all": "npm run build:electron && ng build --prod --base-href",
+    "electron:windows": "npm run build:all && electron-builder build --windows"
   },
   "private": true,
   "dependencies": {
