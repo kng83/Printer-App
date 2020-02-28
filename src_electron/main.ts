@@ -1,5 +1,6 @@
 
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu } from 'electron';
+import { template } from './Main_Bar/menu_template';
 import * as path from 'path';
 import { SomeClass } from './some.class';
 import * as url from 'url';
@@ -8,11 +9,16 @@ import * as url from 'url';
 //**For develop serve argument is attached
 const appArgs = process.argv.slice(1);
 const serve = appArgs.some(val => val === '--serve');
-let win:BrowserWindow = null;
+let win: BrowserWindow = null;
+
+
+//** building menu from template file
+const menu = Menu.buildFromTemplate(template);
+Menu.setApplicationMenu(menu);
 
 
 // ** Function which creates window
-function createWindow():BrowserWindow {
+function createWindow(): BrowserWindow {
   // Stwórz okno przeglądarki.
   win = new BrowserWindow({
     width: 800,
@@ -40,7 +46,7 @@ function createWindow():BrowserWindow {
     win.loadURL('http://localhost:4200');
   } else {
     //** Prod: path to angular build file */
-  //  win.loadFile(path.join(mainDirName, 'dist/Printer-App/index.html'));
+    //  win.loadFile(path.join(mainDirName, 'dist/Printer-App/index.html'));
     win.loadURL(url.format({
       pathname: path.join(mainDirName, 'dist/Printer-App/index.html'),
       protocol: 'file:',

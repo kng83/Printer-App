@@ -1,12 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var electron_1 = require("electron");
+var menu_template_1 = require("./Main_Bar/menu_template");
 var path = require("path");
 var url = require("url");
 //**For develop serve argument is attached
 var appArgs = process.argv.slice(1);
 var serve = appArgs.some(function (val) { return val === '--serve'; });
 var win = null;
+//** building menu from template file
+var menu = electron_1.Menu.buildFromTemplate(menu_template_1.template);
+electron_1.Menu.setApplicationMenu(menu);
 // ** Function which creates window
 function createWindow() {
     // Stwórz okno przeglądarki.
