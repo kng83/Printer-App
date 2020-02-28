@@ -8,7 +8,7 @@ export  const template: MenuItemConstructorOptions[] = [
     {
       label: 'File',
       submenu: [
-        { role: 'open', type: 'normal' ,label:'Open File...', click:()=>openFileService.getData()},
+        { role: 'services', type: 'normal' ,label:'Open File...', click:()=>openFileService.getData()},
         { role:'quit', type:'normal',label: 'Zamknij'}
       ]
     },
