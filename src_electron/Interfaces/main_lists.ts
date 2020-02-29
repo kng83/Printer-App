@@ -6,6 +6,8 @@ export enum ComList{
     infoMessage_2 = "infoMessage_2",
     infoMessage_3 = "infoMessage_3",
     infoMessage_4 = "infoMessage_4",
+    sendColumnsInfo = "sendColumnsInfo",
+    sendDataRows = "sendDataRows"
 }
 
 export enum LoadFile{

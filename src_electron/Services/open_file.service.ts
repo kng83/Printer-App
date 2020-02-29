@@ -56,6 +56,7 @@ export class OpenFileService {
         this.dataFileReadOk = false;
         return this.getDataFromFile().then(data => {
              this.convertCsvToArray(data).then(record => {
+                 console.log(record.length,'some');
                 this.originalDataRecord = record;
 
                 //** This is mut record with trim etc.. */

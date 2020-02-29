@@ -19,23 +19,28 @@
   <div class="card text-white bg-primary mb-1" style="max-width: 18rem;">
       <div class="card-body">
         <h5 class="card-title">Wpisz nr kolumn do porownania</h5>
-
+        <!-- form is started here -->
+        <form #columnForm="ngForm"  (ngSubmit)="onSubmit()" >
         <div class="form-group">
           <label>Kolumna pierwszego pliku</label>
-          <input type="number" class="form-control">
+          <input type="number" class="form-control"  [(ngModel)]="firstFileColumn" name="name" required>
         </div>
         <div class="form-group">
           <label>Kolumna drugiego pliku</label>
-          <input type="number" class="form-control">
+          <input type="number" class="form-control"  [(ngModel)]="secondFileColumn" name="name" required>
         </div>
-        <button class="btn btn-warning">Zatwierdz</button>
-        <p class="card-text">{{textFromElectron_3}}</p>
+        <button type="submit" class="btn btn-success"  [disabled]="!columnForm.form.valid">Zatwierdz</button>
+      </form>
       </div>
   </div>
 </div>
 
-<div *ngIf="showMatchButton">
-  <div class="mb-2">
-    <button class="btn btn-warning" (click)="compareFiles()">Porownaj pliki</button>
-  </div>
+<div *ngIf="showTable">
+  <table class="table">
+      <tbody>
+        <tr *ngFor="let row of rowsContent">
+          <th *ngFor="let element of row">{{element}}</th>
+        </tr>
+      </tbody>
+  </table>
 </div>
