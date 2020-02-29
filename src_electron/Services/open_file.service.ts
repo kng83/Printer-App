@@ -2,12 +2,14 @@ import { dialog, OpenDialogReturnValue } from 'electron';
 import * as fs from 'fs';
 import * as util from 'util';
 import * as csvParse from 'csv-parse'
+import { ElementSchemaRegistry } from '@angular/compiler';
 
 //** Service for file open and data get */
 export class OpenFileService {
 
     filePath: string;
-    dataRecord:string[];
+    originalDataRecord:string[];
+    mutData:string[];
     dataFileReadOk:boolean = false;
 
     private async getFilePath(): Promise<string> {
@@ -41,14 +43,19 @@ export class OpenFileService {
             })
         })
     }
+    private convertRecord(data:string[]):string[]{
+        return data.map((element)=> element.trim())
+    }
 
     public getData() {
         this.dataFileReadOk = false;
         return this.getDataFromFile().then(data => {
              this.convertCsvToArray(data).then(record => {
-                 this.dataRecord = record;
+                 this.originalDataRecord = record;
                  this.dataFileReadOk = true;
+
                  console.log(record[1])
+                 console.log(this.convertRecord(this.originalDataRecord)[1])
                 }).catch(e => console.log(e.message));
       
         }).catch(console.log)
