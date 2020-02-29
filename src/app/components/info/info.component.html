@@ -1,46 +1,51 @@
-<div class="card text-white bg-secondary mb-1" style="max-width: 18rem;">
+<div class="container mx-auto w-100">
+  <div class="card text-white bg-secondary mb-1 w-100">
     <div class="card-body">
-      <h5 class="card-title">Zaladuj pierwszy plik</h5>
-      <p class="card-text">{{textFromElectron_1}}</p>
+      <h5 class="card-title text-center">Zaladuj pierwszy plik</h5>
+      <p class="card-text text-center">{{textFromElectron_1}}</p>
     </div>
-</div>
-
-<div *ngIf="show">
-    <div class="card text-white bg-success mb-1" style="max-width: 18rem;">
-        <div class="card-body">
-          <h5 class="card-title">Zaladuj drugi plik</h5>
-          <p class="card-text">{{textFromElectron_2}}</p>
-        </div>
-    </div>
-</div>
-
-
-<div *ngIf="showColumnPicker">
-  <div class="card text-white bg-primary mb-1" style="max-width: 18rem;">
-      <div class="card-body">
-        <h5 class="card-title">Wpisz nr kolumn do porownania</h5>
-        <!-- form is started here -->
-        <form #columnForm="ngForm"  (ngSubmit)="onSubmit()" >
-        <div class="form-group">
-          <label>Kolumna pierwszego pliku</label>
-          <input type="number" class="form-control"  [(ngModel)]="firstFileColumn" name="name" required>
-        </div>
-        <div class="form-group">
-          <label>Kolumna drugiego pliku</label>
-          <input type="number" class="form-control"  [(ngModel)]="secondFileColumn" name="name" required>
-        </div>
-        <button type="submit" class="btn btn-success"  [disabled]="!columnForm.form.valid">Zatwierdz</button>
-      </form>
-      </div>
   </div>
-</div>
 
-<div *ngIf="showTable">
-  <table class="table">
+  <div *ngIf="show">
+    <div class="card text-white bg-success mb-1 w-100">
+      <div class="card-body">
+        <h5 class="card-title text-center">Zaladuj drugi plik</h5>
+        <p class="card-text text-center">{{textFromElectron_2}}</p>
+      </div>
+    </div>
+  </div>
+
+
+  <div *ngIf="showColumnPicker">
+    <div class="card text-white bg-primary mb-1 w-100">
+      <div class="card-body">
+        <h5 class="card-title text-center">Wpisz nr kolumn do porownania</h5>
+        <!-- form is started here -->
+        <form #columnForm="ngForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label>Kolumna pierwszego pliku</label>
+            <input type="number" class="form-control" [(ngModel)]="firstFileColumn" name="name" required>
+          </div>
+          <div class="form-group">
+            <label>Kolumna drugiego pliku</label>
+            <input type="number" class="form-control" [(ngModel)]="secondFileColumn" name="name" required>
+          </div>
+          <button type="submit" class="btn btn-success" [disabled]="!columnForm.form.valid">Zatwierdz</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <br>
+  <br>
+  <hr>
+  <div *ngIf="showTable">
+    <table class="table w-100 text-center">
       <tbody>
         <tr *ngFor="let row of rowsContent">
           <th *ngFor="let element of row">{{element}}</th>
         </tr>
       </tbody>
-  </table>
+    </table>
+  </div>
 </div>
