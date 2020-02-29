@@ -25,13 +25,9 @@ export class IpcService {
     this.ipcRenderer.send(channel, data);
   }
 
-  on<T>(channel: ComList): Promise<{ event: IpcRendererEvent, arg: T }> {
-    return new Promise(resolve => {
-      this.ipcRenderer.on(channel, (event, arg) => {
-        resolve({ event, arg })
-      })
-
-    })
+  // from electron
+  on<T>(channel: ComList,callback:(event:IpcRendererEvent,content:T)=>void):void {  
+      this.ipcRenderer.on(channel, callback)
   }
 }
 

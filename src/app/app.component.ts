@@ -12,11 +12,17 @@ export class AppComponent {
   title = "Printer-App";
 
   constructor(private ipcService: IpcService){
-
+    this.someData();
   }
   
   sendData(){
     this.ipcService.send(ComList.sendToElectron, { cat: "bobo 1" })
+  }
+
+  someData(){
+    this.ipcService.on(ComList.sendToAngular,(event,content)=>{
+       console.log(content);
+    });
   }
 
 }

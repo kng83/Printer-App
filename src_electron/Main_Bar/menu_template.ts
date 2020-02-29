@@ -9,9 +9,9 @@ function sendStuff(){
 }
 
 
- comService.on(ComList.sendToElectron)//.subscribe((value)=>{
-//     console.log(value[1]);
-// })
+ comService.on(ComList.sendToElectron ,(event, content )=>{
+   console.log(content);
+ })
 
 export  const template: MenuItemConstructorOptions[] = [
     {

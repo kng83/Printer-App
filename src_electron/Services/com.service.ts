@@ -1,6 +1,7 @@
 import { BrowserWindow, ipcMain, IpcMain, IpcMainEvent } from 'electron'
 import { ComList } from '../Interfaces/main_lists';
-import { bindCallback ,Scheduler} from 'rxjs';
+import { bindCallback ,Scheduler,Observable} from 'rxjs';
+import {promisify} from 'util';
 
 
 export class ComService {
@@ -13,23 +14,11 @@ export class ComService {
         this.win = win;
     }
 
-    // public on<T>(channel: ComList): Promise<{ event: IpcMainEvent, arg: T }> {
-    //     return new Promise((resolve) => {
-    //         ipcMain.on(channel, (event, arg: T) => {
-    //             resolve({ event, arg })
-    //         })
-    //     })
-    // }
+     
 
-    
-
-    // public on<T>(channel: ComList ,callback:any) {   
-    //       ipcMain.on(channel, (callback))
+    public on<T>(channel: ComList ,callback:(event:IpcMainEvent,content:T)=>void) {       
+          ipcMain.on(channel, callback)
  
-    // }
-    public on<T>(channel:ComList){
-        const boundObservable = bindCallback(ipcMain.on)
-        return boundObservable(channel).subscribe(val=>console.log(val))
     }
 
     public send<T>(channel: ComList, content: T) {
