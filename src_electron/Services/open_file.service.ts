@@ -1,15 +1,15 @@
-import { dialog, OpenDialogReturnValue } from 'electron';
+import { dialog} from 'electron';
 import * as fs from 'fs';
 import * as util from 'util';
 import * as csvParse from 'csv-parse'
-import { ElementSchemaRegistry } from '@angular/compiler';
+
 
 //** Service for file open and data get */
 export class OpenFileService {
 
     filePath: string;
-    originalDataRecord:string[];
-    mutData:string[];
+    originalDataRecord:string[][];
+    mutData:string[][];
     dataFileReadOk:boolean = false;
 
     private async getFilePath(): Promise<string> {
@@ -35,7 +35,7 @@ export class OpenFileService {
         }
     }
 
-   private async convertCsvToArray(data:Buffer):Promise<string[]>{
+   private async convertCsvToArray(data:Buffer):Promise<string[][]>{
         return new Promise((resolve,reject)=>{
             csvParse(data,{columns:false},(err,record)=>{
                 resolve(record);
@@ -43,19 +43,22 @@ export class OpenFileService {
             })
         })
     }
-    private convertRecord(data:string[]):string[]{
-        return data.map((element)=> element.trim())
+    private convertRecord(data:string[][]):string[][]{
+        return data.map((strArr)=> {
+              return  strArr.map(element=> element.trim())           
+        });
     }
 
     public getData() {
         this.dataFileReadOk = false;
         return this.getDataFromFile().then(data => {
              this.convertCsvToArray(data).then(record => {
-                 this.originalDataRecord = record;
-                 this.dataFileReadOk = true;
+                this.originalDataRecord = record;
 
-                 console.log(record[1])
-                 console.log(this.convertRecord(this.originalDataRecord)[1])
+                //** This is mut record with trim etc.. */
+                this.mutData =  this.convertRecord(this.originalDataRecord);
+                this.dataFileReadOk = true;
+                console.log(this.dataFileReadOk , this.mutData[1000][1]);
                 }).catch(e => console.log(e.message));
       
         }).catch(console.log)

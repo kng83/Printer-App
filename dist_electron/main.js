@@ -4,17 +4,18 @@ var electron_1 = require("electron");
 var menu_template_1 = require("./Main_Bar/menu_template");
 var path = require("path");
 var url = require("url");
+var service_list_service_1 = require("./Services/service_list.service");
 //**For develop serve argument is attached
 var appArgs = process.argv.slice(1);
 var serve = appArgs.some(function (val) { return val === '--serve'; });
-var win = null;
+exports.win = null;
 //** building menu from template file
 var menu = electron_1.Menu.buildFromTemplate(menu_template_1.template);
 electron_1.Menu.setApplicationMenu(menu);
 // ** Function which creates window
 function createWindow() {
     // Stwórz okno przeglądarki.
-    win = new electron_1.BrowserWindow({
+    exports.win = new electron_1.BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
@@ -22,6 +23,8 @@ function createWindow() {
             allowRunningInsecureContent: true
         }
     });
+    //Service Register
+    service_list_service_1.comService.mountWin(exports.win);
     //** Life electron reload */
     var mainDirName = path.join(__dirname, '..');
     //** Serving dev or production mode */
@@ -33,27 +36,27 @@ function createWindow() {
             argv: [process.argv[1], process.argv[2]] //here is passed path './src_electron/main.js [1] , serve[2]
         });
         //** DEV: Angular view from serve mode */
-        win.loadURL('http://localhost:4200');
+        exports.win.loadURL('http://localhost:4200');
     }
     else {
         //** Prod: path to angular build file */
         //  win.loadFile(path.join(mainDirName, 'dist/Printer-App/index.html'));
-        win.loadURL(url.format({
+        exports.win.loadURL(url.format({
             pathname: path.join(mainDirName, 'dist/Printer-App/index.html'),
             protocol: 'file:',
             slashes: true
         }));
     }
     if (serve) {
-        win.webContents.openDevTools();
+        exports.win.webContents.openDevTools();
     }
-    win.on('closed', function () {
+    exports.win.on('closed', function () {
         // Dereference the window object, usually you would store window
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
-        win = null;
+        exports.win = null;
     });
-    return win;
+    return exports.win;
 }
 //** Run electron app */
 try {
@@ -74,7 +77,7 @@ try {
     electron_1.app.on('activate', function () {
         // On OS X it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
-        if (win === null) {
+        if (exports.win === null) {
             createWindow();
         }
     });
@@ -82,7 +85,7 @@ try {
 catch (e) {
     console.log(e);
 }
-electron_1.ipcMain.on('openModal', function (event, arg) {
-    console.log(arg, 'some snake was found a in srg sssa1');
-});
+// ipcMain.on('openModal', (event, arg) => {
+//   console.log(arg, 'some snake was found a in srg sssa1');
+// })
 //# sourceMappingURL=main.js.map

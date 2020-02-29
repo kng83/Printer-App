@@ -1,15 +1,16 @@
 
-import { app, BrowserWindow, ipcMain, Menu } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu, ipcRenderer } from 'electron';
 import { template } from './Main_Bar/menu_template';
 import * as path from 'path';
 import { SomeClass } from './some.class';
 import * as url from 'url';
+import {comService} from './Services/service_list.service';
 
 
 //**For develop serve argument is attached
 const appArgs = process.argv.slice(1);
 const serve = appArgs.some(val => val === '--serve');
-let win: BrowserWindow = null;
+export let win: BrowserWindow = null;
 
 
 //** building menu from template file
@@ -28,6 +29,10 @@ function createWindow(): BrowserWindow {
       allowRunningInsecureContent: true
     }
   });
+
+  //Service Register
+  comService.mountWin(win);
+
 
 
   //** Life electron reload */
@@ -98,7 +103,8 @@ try {
   console.log(e);
 }
 
-ipcMain.on('openModal', (event, arg) => {
-  console.log(arg, 'some snake was found a in srg sssa1');
-})
+// ipcMain.on('openModal', (event, arg) => {
+//   console.log(arg, 'some snake was found a in srg sssa1');
+// })
+
 

@@ -1,14 +1,24 @@
-import {MenuItem,MenuItemConstructorOptions, BrowserWindow, dialog} from 'electron';
-import {openFileService} from '../Services/service_list.service';
+import {MenuItem,MenuItemConstructorOptions, BrowserWindow, dialog,ipcMain } from 'electron';
+import {openFileService, comService} from '../Services/service_list.service';
+import { ComList } from '../Interfaces/main_lists';
 
 
 
+function sendStuff(){
+  comService.send(ComList.sendToAngular,{pies:"super pies"});
+}
+
+
+ comService.on(ComList.sendToElectron)//.subscribe((value)=>{
+//     console.log(value[1]);
+// })
 
 export  const template: MenuItemConstructorOptions[] = [
     {
       label: 'File',
       submenu: [
         { role: 'services', type: 'normal' ,label:'Open File...', click:()=>openFileService.getData()},
+        { role: 'services', type: 'normal' ,label:'Send To', click:()=>sendStuff()},
         { role:'quit', type:'normal',label: 'Zamknij'}
       ]
     },

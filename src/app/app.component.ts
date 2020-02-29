@@ -1,5 +1,7 @@
 import { Component } from "@angular/core";
 import { IpcRenderer } from "electron";
+import {IpcService} from "./services/ipc.service"
+import { ComList } from 'src_electron/Interfaces/main_lists';
 
 @Component({
   selector: "app-root",
@@ -9,20 +11,12 @@ import { IpcRenderer } from "electron";
 export class AppComponent {
   title = "Printer-App";
 
-  private ipc: IpcRenderer;
-  constructor() {
-    if ((<any>window).require) {
-      try {
-        this.ipc = (<any>window).require("electron").ipcRenderer;
-      } catch (e) {
-        throw e;
-      }
-    } else {
-      console.warn("App not running inside Electron!");
-    }
+  constructor(private ipcService: IpcService){
+
+  }
+  
+  sendData(){
+    this.ipcService.send(ComList.sendToElectron, { cat: "bobo 1" })
   }
 
-  openModal() {
-    this.ipc.send("openModal",{cat:"bobo 1"});
-  }
-}//
+}
