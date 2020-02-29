@@ -1,6 +1,7 @@
 import {MenuItem,MenuItemConstructorOptions, BrowserWindow, dialog,ipcMain } from 'electron';
-import {openFileService, comService} from '../Services/service_list.service';
-import { ComList } from '../Interfaces/main_lists';
+import {openFileService, comService,storageService} from '../Services/service_list.service';
+import { ComList, LoadFile } from '../Interfaces/main_lists';
+
 
 
 
@@ -17,7 +18,8 @@ export  const template: MenuItemConstructorOptions[] = [
     {
       label: 'File',
       submenu: [
-        { role: 'services', type: 'normal' ,label:'Open File...', click:()=>openFileService.getData()},
+        { role: 'services', type: 'normal' ,label:'Open File...', click:()=>openFileService.getData(LoadFile.firstFile,storageService)},
+        { role: 'services', type: 'normal' ,label:'Open Second File...', click:()=>openFileService.getData(LoadFile.secondFile,storageService)},
         { role: 'services', type: 'normal' ,label:'Send To', click:()=>sendStuff()},
         { role:'quit', type:'normal',label: 'Zamknij'}
       ]

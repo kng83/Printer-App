@@ -1,8 +1,5 @@
 import { BrowserWindow, ipcMain, IpcMain, IpcMainEvent } from 'electron'
 import { ComList } from '../Interfaces/main_lists';
-import { bindCallback ,Scheduler,Observable} from 'rxjs';
-import {promisify} from 'util';
-
 
 export class ComService {
 

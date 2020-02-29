@@ -2,7 +2,6 @@
 import { app, BrowserWindow, ipcMain, Menu, ipcRenderer } from 'electron';
 import { template } from './Main_Bar/menu_template';
 import * as path from 'path';
-import { SomeClass } from './some.class';
 import * as url from 'url';
 import {comService} from './Services/service_list.service';
 

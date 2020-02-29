@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { IpcRenderer, IpcRendererEvent } from "electron";
-import { IpcData } from "../interfaces/ipc.interfaces";
 import { ComList } from "../../../src_electron/Interfaces/main_lists";
 
 

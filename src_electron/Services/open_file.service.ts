@@ -2,6 +2,9 @@ import { dialog} from 'electron';
 import * as fs from 'fs';
 import * as util from 'util';
 import * as csvParse from 'csv-parse'
+import {comService} from './service_list.service';
+import { ComList, LoadFile } from '../Interfaces/main_lists';
+import { StorageService } from './storage.service';
 
 
 //** Service for file open and data get */
@@ -49,7 +52,7 @@ export class OpenFileService {
         });
     }
 
-    public getData() {
+    public getData(key:string,store:StorageService) {
         this.dataFileReadOk = false;
         return this.getDataFromFile().then(data => {
              this.convertCsvToArray(data).then(record => {
@@ -58,7 +61,18 @@ export class OpenFileService {
                 //** This is mut record with trim etc.. */
                 this.mutData =  this.convertRecord(this.originalDataRecord);
                 this.dataFileReadOk = true;
-                console.log(this.dataFileReadOk , this.mutData[1000][1]);
+
+                store.save(key,{original:this.originalDataRecord,mut:this.mutData});
+
+                //**!!!!!!!!!! Na razie wyslij info stad */
+                if(key === LoadFile.firstFile ){
+                    comService.send<string>(ComList.infoMessage_1,`Plik pierwszy zaladowny i sciezka to ${this.filePath}`);
+                }
+
+                if(key === LoadFile.secondFile){
+                    comService.send<string>(ComList.infoMessage_2,`Plik drugi zaladowny i sciezka to ${this.filePath}`);
+                }
+
                 }).catch(e => console.log(e.message));
       
         }).catch(console.log)
