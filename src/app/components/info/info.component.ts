@@ -9,7 +9,6 @@ import { ComList } from 'src_electron/Interfaces/main_lists';
   styleUrls: ['./info.component.scss']
 })
 export class InfoComponent implements OnInit {
-  show = false;
   showMatchButton = false;
   showColumnPicker = false;
   showTable = false;
@@ -23,12 +22,6 @@ export class InfoComponent implements OnInit {
   constructor(private ipcService: IpcService,  private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.ipcService.on<string>(ComList.infoMessage_1, (event, content) => {
-      this.textFromElectron_1 = content;
-      this.show = true;
-      this.cdr.detectChanges();
-    })
-
     this.ipcService.on<string>(ComList.infoMessage_2,(event, content)=>{
       this.textFromElectron_2 = content
       this.showColumnPicker = true;
@@ -54,7 +47,7 @@ export class InfoComponent implements OnInit {
   }
 
   onSubmit(){
-    this.ipcService.send(ComList.sendColumnsInfo,{fileOne:this.firstFileColumn, fileTwo:this.secondFileColumn});
+    this.ipcService.send(ComList.sendColumnsInfo,true);
   }
 
 }

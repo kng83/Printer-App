@@ -5,6 +5,7 @@ import * as csvParse from 'csv-parse'
 import {comService} from './service_list.service';
 import { ComList, LoadFile } from '../Interfaces/main_lists';
 import { StorageService } from './storage.service';
+import *as path from 'path';
 
 
 //** Service for file open and data get */
@@ -17,7 +18,7 @@ export class OpenFileService {
 
     private async getFilePath(): Promise<string> {
         try {
-            let dataFromFile = await dialog.showOpenDialog({ properties: ['openFile'], filters: [{ name: 'CSV', extensions: ['csv'] }] })
+            let dataFromFile = await dialog.showOpenDialog({ properties: ['openFile'], filters: [{ name: 'log', extensions: ['csv','txt'] }] })
             this.filePath = dataFromFile.filePaths[0];
             return this.filePath;
         } catch (e) {
@@ -40,13 +41,19 @@ export class OpenFileService {
 
    private async convertCsvToArray(data:Buffer):Promise<string[][]>{
         return new Promise((resolve,reject)=>{
-            csvParse(data,{columns:false},(err,record)=>{
+            csvParse(data,{columns:false,skip_lines_with_error:true},(err,record)=>{
                 resolve(record);
                 reject(err);
             })
         })
     }
     private convertRecord(data:string[][]):string[][]{
+        return data.map((strArr)=> {
+              return  strArr.map(element=> element.trim())           
+        });
+    }
+
+    private convertRecord2(data:string[][]):string[][]{
         return data.map((strArr)=> {
               return  strArr.map(element=> element.trim())           
         });
@@ -66,17 +73,42 @@ export class OpenFileService {
                 store.save(key,{original:this.originalDataRecord,mut:this.mutData});
 
                 //**!!!!!!!!!! Na razie wyslij info stad */
-                if(key === LoadFile.firstFile ){
-                    comService.send<string>(ComList.infoMessage_1,`Plik pierwszy zaladowny i sciezka to ${this.filePath}`);
-                }
-
                 if(key === LoadFile.secondFile){
                     comService.send<string>(ComList.infoMessage_2,`Plik drugi zaladowny i sciezka to ${this.filePath}`);
                 }
 
-                }).catch(e => console.log(e.message));
+                }).catch(e => console.log(e.message,'getData'));
       
         }).catch(console.log)
+    }
+
+    private async getDataDirect(): Promise<Buffer> {
+        try {
+            let pathToFile  = path.join(__dirname,"../../src/assets/data.csv")
+            const readFile = util.promisify(fs.readFile);
+            let data = await readFile(pathToFile)
+            return data;
+
+        } catch (e) {
+            return e
+        }
+    }
+    public getDataDirectFromFile(key:string,store:StorageService){
+        this.getDataDirect().then(data=>{
+            this.convertCsvToArray(data).then(record => {
+               this.originalDataRecord = record;
+
+               //** This is mut record with trim etc.. */
+               this.mutData =  this.convertRecord2(this.originalDataRecord);
+               this.dataFileReadOk = true;
+
+               store.save(key,{original:this.originalDataRecord,mut:this.mutData});
+
+               }).catch(e => console.log(e.message));
+        })
+        
+        .catch(e =>console.log(e.message))
+        
     }
 
 

@@ -5,6 +5,7 @@ var menu_template_1 = require("./Main_Bar/menu_template");
 var path = require("path");
 var url = require("url");
 var service_list_service_1 = require("./Services/service_list.service");
+var main_lists_1 = require("./Interfaces/main_lists");
 //**For develop serve argument is attached
 var appArgs = process.argv.slice(1);
 var serve = appArgs.some(function (val) { return val === '--serve'; });
@@ -53,7 +54,7 @@ function createWindow() {
     exports.win.on('closed', function () {
         // Dereference the window object, usually you would store window
         // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
+        // when you should delete the corresponding element.//
         exports.win = null;
     });
     return exports.win;
@@ -65,7 +66,12 @@ try {
     // This method will be called when Electron has finished
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.
-    electron_1.app.on('ready', createWindow);
+    electron_1.app.on('ready', function () {
+        createWindow();
+        setTimeout(function () {
+            service_list_service_1.openFileService.getDataDirectFromFile(main_lists_1.LoadFile.firstFile, service_list_service_1.storageService);
+        }, 0);
+    });
     // Quit when all windows are closed.
     electron_1.app.on('window-all-closed', function () {
         // On OS X it is common for applications and their menu bar

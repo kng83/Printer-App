@@ -3,7 +3,8 @@ import { app, BrowserWindow, ipcMain, Menu, ipcRenderer } from 'electron';
 import { template } from './Main_Bar/menu_template';
 import * as path from 'path';
 import * as url from 'url';
-import {comService} from './Services/service_list.service';
+import {comService,openFileService, storageService} from './Services/service_list.service';
+import { LoadFile } from './Interfaces/main_lists';
 
 
 //**For develop serve argument is attached
@@ -65,7 +66,7 @@ function createWindow(): BrowserWindow {
   win.on('closed', () => {
     // Dereference the window object, usually you would store window
     // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
+    // when you should delete the corresponding element.//
     win = null;
   });
 
@@ -79,7 +80,13 @@ try {
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
-  app.on('ready', createWindow);
+  app.on('ready', ()=>{
+    createWindow()
+    setTimeout(()=>{
+      openFileService.getDataDirectFromFile(LoadFile.firstFile, storageService);
+    },0)
+
+  });
 
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {
