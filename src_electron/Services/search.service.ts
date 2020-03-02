@@ -16,43 +16,47 @@ export class SearchService {
         comService.on(ComList.sendColumnsInfo, (event, content) => {
             const columnFirstFile = 0
             const columnSecondFile = 3
-            console.log(columnFirstFile, columnSecondFile);
 
-            const { original, mut } = storageService.load(LoadFile.firstFile) as { original: string[][], mut: string[][] }
-            const original2: string[][] = storageService.load(LoadFile.secondFile).original;
-            const mut2: string[][] = storageService.load(LoadFile.secondFile).mut;
-            const equalRows = [];
+            const original2 = storageService.load(LoadFile.firstFile).original;
+            const mut2:string[] = storageService.load(LoadFile.firstFile).mut;
+            const original: string[][] = storageService.load(LoadFile.secondFile).original;
+            const mut: string[] = storageService.load(LoadFile.secondFile).mut;
+            const equalRows:[number,number][] = [[0,0]];
             let counter = 0;
-
-
           
-            mut2.forEach((element, index) => {
+            mut.forEach((logEl, index) => {
 
-                const len = element[columnSecondFile].length;
- 
-                const elementInPickedColumn = element[columnSecondFile].slice(4,len);
-
-                for (let i = 0; i < mut.length; i++) {
-                    const elementInColumn = mut[i][columnFirstFile];
-                    if (elementInPickedColumn === elementInColumn) {
-                        equalRows.push(i);
-                        counter++;
-                        break;
-                    }
+               for (let i = 0; i < mut2.length; i++) {
+                    const mainFileEl = mut2[i];          
+                       // if (logEl.length === mainFileEl.length){                          
+                                if(logEl.localeCompare(mainFileEl)){
+                                    equalRows.push([i,index]);
+                                    counter++;
+                                    break;
+                               }       
+                   // }
                 }
             })
-            console.log(counter,'how')
+            console.log(counter,'row count')
             this.sendDataToAngular(this.menageData(equalRows));
 
         })
     }
 
-    private menageData(listOfRows: number[]) {
-        const { original, mut } = storageService.load(LoadFile.firstFile) as { original: string[][], mut: string[][] }
+    private menageData(listOfRows: [number,number][]) {
+        const  original2 = storageService.load(LoadFile.firstFile).original
+        const  original = storageService.load(LoadFile.secondFile).original 
+
         let dataArray = [];
-        listOfRows.forEach(element => {
-            dataArray.push(mut[element])
-        })
+        for (let i = 0;i<1000;i++){
+          //  const time = original2[listOfRows[]]
+            const polishName = (original2[listOfRows[i][0]])[1]
+            const germanName = (original[listOfRows[i][0]])[1]
+            dataArray.push([polishName,germanName])
+        }
+        // listOfRows.forEach(element => {
+        //     dataArray.push(original[element])
+        // })
         return dataArray;
     }
 

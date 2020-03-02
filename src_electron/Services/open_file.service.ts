@@ -13,7 +13,9 @@ export class OpenFileService {
 
     filePath: string;
     originalDataRecord:string[][];
-    mutData:string[][];
+    originalDataRecord2:string[][];
+    mutData:string[];
+    mutData2:string[];
     dataFileReadOk:boolean = false;
 
     private async getFilePath(): Promise<string> {
@@ -47,15 +49,17 @@ export class OpenFileService {
             })
         })
     }
-    private convertRecord(data:string[][]):string[][]{
-        return data.map((strArr)=> {
-              return  strArr.map(element=> element.trim())           
-        });
+    private convertRecord2(data:string[][]):string[]{
+              return  data.map(element=> element[0])           
+
     }
 
-    private convertRecord2(data:string[][]):string[][]{
-        return data.map((strArr)=> {
-              return  strArr.map(element=> element.trim())           
+    private convertRecord(data:string[][]):string[]{
+        return data.map((element)=> {
+                const len = element[3].length;
+                const elementInPickedColumn = element[3].slice(4,len);
+                   return elementInPickedColumn;
+     
         });
     }
 
@@ -63,7 +67,7 @@ export class OpenFileService {
         this.dataFileReadOk = false;
         return this.getDataFromFile().then(data => {
              this.convertCsvToArray(data).then(record => {
-                 console.log(record.length,'some');
+                 console.log(record.length,'length of log record');
                 this.originalDataRecord = record;
 
                 //** This is mut record with trim etc.. */
@@ -96,13 +100,13 @@ export class OpenFileService {
     public getDataDirectFromFile(key:string,store:StorageService){
         this.getDataDirect().then(data=>{
             this.convertCsvToArray(data).then(record => {
-               this.originalDataRecord = record;
+               this.originalDataRecord2 = record;
 
                //** This is mut record with trim etc.. */
-               this.mutData =  this.convertRecord2(this.originalDataRecord);
+               this.mutData2 =  this.convertRecord2(this.originalDataRecord2);
                this.dataFileReadOk = true;
 
-               store.save(key,{original:this.originalDataRecord,mut:this.mutData});
+               store.save(key,{original:this.originalDataRecord2,mut:this.mutData2});
 
                }).catch(e => console.log(e.message));
         })
