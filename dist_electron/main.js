@@ -8,7 +8,7 @@ var service_list_service_1 = require("./Services/service_list.service");
 var main_lists_1 = require("./Interfaces/main_lists");
 //**For develop serve argument is attached
 var appArgs = process.argv.slice(1);
-var serve = appArgs.some(function (val) { return val === '--serve'; });
+exports.serve = appArgs.some(function (val) { return val === '--serve'; });
 exports.win = null;
 //** building menu from template file
 var menu = electron_1.Menu.buildFromTemplate(menu_template_1.template);
@@ -29,7 +29,7 @@ function createWindow() {
     //** Life electron reload */
     var mainDirName = path.join(__dirname, '..');
     //** Serving dev or production mode */
-    if (serve) {
+    if (exports.serve) {
         require('electron-reload')(__dirname, {
             electron: require(mainDirName + "/node_modules/electron"),
             hardResetMethod: 'quit',
@@ -48,7 +48,7 @@ function createWindow() {
             slashes: true
         }));
     }
-    if (serve) {
+    if (exports.serve) {
         exports.win.webContents.openDevTools();
     }
     exports.win.on('closed', function () {

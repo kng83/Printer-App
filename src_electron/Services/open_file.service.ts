@@ -6,6 +6,7 @@ import {comService} from './service_list.service';
 import { ComList, LoadFile } from '../Interfaces/main_lists';
 import { StorageService } from './storage.service';
 import *as path from 'path';
+import {serve} from '../main';
 
 
 //** Service for file open and data get */
@@ -90,6 +91,10 @@ export class OpenFileService {
     private async getDataDirect(): Promise<Buffer> {
         try {
             let pathToFile  = path.join(__dirname,"../../src/assets/data.csv")
+            if(!serve){
+                pathToFile = path.join(__dirname,"../../dist/Printer-App/assets/data.csv")
+            }
+           
             const readFile = util.promisify(fs.readFile);
             let data = await readFile(pathToFile)
             return data;

@@ -9,7 +9,7 @@ import { LoadFile } from './Interfaces/main_lists';
 
 //**For develop serve argument is attached
 const appArgs = process.argv.slice(1);
-const serve = appArgs.some(val => val === '--serve');
+export const serve = appArgs.some(val => val === '--serve');
 export let win: BrowserWindow = null;
 
 
