@@ -1,21 +1,34 @@
 
 <div>
-    <div class="card text-white bg-success mb-1 w-100">
+    <div class="card text-white bg-primary mb-1 w-100">
       <div class="card-body">
         <h5 class="card-title text-center">Zaladuj plik</h5>
         <p class="card-text text-center">{{textFromElectron_2}}</p>
       </div>
     </div>
-
+    <br>
   <div *ngIf="showColumnPicker">
-          <button type="submit" class="btn btn-success" (click)="onSubmit()">Zatwierdz</button>
+          <button type="submit" class="btn btn-outline-primary" (click)="onSubmit()">Generuj Plik</button>
   </div>
 
+  <!-- <div class="mb-0 w-75">
+    <img class="img-boobs" src="../../../assets/boobs.gif">
+  </div> -->
+ 
+  <hr>
+  <br>
+  <div *ngIf="showMsgFileCreated">
+    <div class="card text-white bg-warning mb-0 w-100">
+      <div class="card-body">
+        <h5 class="card-title text-center">Plik zostal wygenerowany</h5>
+        <p class="card-text text-center">{{textFromElectron_4}}</p>
+      </div>
+  </div>
 
   <br>
   <br>
   <hr>
-  <div *ngIf="showTable">
+  <!-- <div *ngIf="showTable">
     <table class="table w-100 text-center">
       <tbody>
         <tr *ngFor="let row of rowsContent;index as i">
@@ -25,4 +38,4 @@
       </tbody>
     </table>
   </div>
-</div>
+</div> -->

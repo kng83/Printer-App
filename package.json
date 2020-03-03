@@ -1,5 +1,5 @@
 {
-  "name": "printer-app",
+  "name": "log-converter",
   "version": "0.0.0",
   "main": "./dist_electron/main.js",
   "scripts": {

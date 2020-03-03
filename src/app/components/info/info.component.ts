@@ -12,9 +12,11 @@ export class InfoComponent implements OnInit {
   showMatchButton = false;
   showColumnPicker = false;
   showTable = false;
+  showMsgFileCreated = false;
   textFromElectron_1:string;
   textFromElectron_2:string;
   textFromElectron_3:string;
+  textFromElectron_4:string;
   firstFileColumn:number;
   secondFileColumn:number;
   rowsContent:string[][];
@@ -25,12 +27,7 @@ export class InfoComponent implements OnInit {
     this.ipcService.on<string>(ComList.infoMessage_2,(event, content)=>{
       this.textFromElectron_2 = content
       this.showColumnPicker = true;
-      this.cdr.detectChanges();
-    })
-
-    this.ipcService.on<string>(ComList.infoMessage_3,(event, content)=>{
-      this.textFromElectron_3 = content
-      this.showColumnPicker = true;
+      this.showMsgFileCreated = false;
       this.cdr.detectChanges();
     })
 
@@ -39,6 +36,12 @@ export class InfoComponent implements OnInit {
       this.showTable = true;
       this.cdr.detectChanges();
 
+    })
+
+    this.ipcService.on<string>(ComList.infoMessage_4,(event,content)=>{
+      this.textFromElectron_4 = content;
+      this.showMsgFileCreated = true;
+      this.cdr.detectChanges();
     })
   }
 

@@ -13,4 +13,4 @@ export enum ComList{
 export enum LoadFile{
     firstFile = "firstFile",
     secondFile = "secondFile"
-}
+}//

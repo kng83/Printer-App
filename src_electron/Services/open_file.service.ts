@@ -12,6 +12,7 @@ import *as path from 'path';
 export class OpenFileService {
 
     filePath: string;
+    pathToNewFile:string;
     originalDataRecord:string[][];
     originalDataRecord2:string[][];
     mutData:string[];
@@ -78,7 +79,7 @@ export class OpenFileService {
 
                 //**!!!!!!!!!! Na razie wyslij info stad */
                 if(key === LoadFile.secondFile){
-                    comService.send<string>(ComList.infoMessage_2,`Plik drugi zaladowny i sciezka to ${this.filePath}`);
+                    comService.send<string>(ComList.infoMessage_2,`Plik został zaladowny i sciezka to ${this.filePath}`);
                 }
 
                 }).catch(e => console.log(e.message,'getData'));
@@ -115,15 +116,14 @@ export class OpenFileService {
         
     }
     public mapFile(data:string[][]){
-        return data.map(row => row.join(',')).join('\n')
+        return data.map(row => row.join(', ')).join('\n')
     }
     public generateCsvFile(data:string){
         let fileNamePosition = this.filePath.lastIndexOf('\\');
         let pathToDir = this.filePath.slice(0,fileNamePosition);
-       // console.log(this.filePath,pathToDir,'    ',path.join(pathToDir,'out_data.txt'));
-       //fs.writeFile(path.join(pathToDir,'out_data.txt'),data,(err)=>console.log(err));
         let csvFile = util.promisify(fs.writeFile);
-        return csvFile(path.join(pathToDir,'out_data.txt'),data)
+        this.pathToNewFile = path.join(pathToDir,'out_data.txt')
+        return csvFile(this.pathToNewFile,data)
     }
 
 

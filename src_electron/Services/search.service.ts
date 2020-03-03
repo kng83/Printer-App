@@ -17,7 +17,7 @@ export class SearchService {
     onSearchStarted() {
         comService.on(ComList.sendColumnsInfo, (event, content) => {
             if(this.waitingToEnd) return 0;
-            console.log('hererererer');
+            
             this.waitingToEnd = true;
             const mut2:string[] = storageService.load(LoadFile.firstFile).mut;
             const mut: string[] = storageService.load(LoadFile.secondFile).mut;
@@ -41,32 +41,36 @@ export class SearchService {
 
             })
             console.log(counter,'row count')
-            this.sendDataToAngular(this.menageData(equalRows));
+            this.sendDataToAngular(this.menageData(equalRows,counter));
             setTimeout(()=>{
                 this.waitingToEnd = false;
             },5000)
            
-        })
+        })//
     }
 
-    private menageData(listOfRows: number[]) {
+    private menageData(listOfRows: number[],counter:number) {
         const  original2 = storageService.load(LoadFile.firstFile).original
         const  original = storageService.load(LoadFile.secondFile).original 
 
         let dataArray = [];
         for (let i = 0;i<10;i++){
           //  const time = original2[listOfRows[]]
-            const polishName = [original[i][0],original[i][4],(original2[listOfRows[i]])[1],(original2[listOfRows[i]])[0],original[i][1]]
+            const polishName = [original[i][0],original[i][4],(original2[listOfRows[i]])[1],original[i][1],original[i][5]]
             dataArray.push(polishName)
         }
         let secondArray = [];
         for (let i = 0;i<listOfRows.length;i++){
             //  const time = original2[listOfRows[]]
-              const polishName = [original[i][0],original[i][4],(original2[listOfRows[i]])[1],(original2[listOfRows[i]])[0],original[i][1]]
+              const polishName = [original[i][0],original[i][4],(original2[listOfRows[i]])[1],original[i][1],original[i][5]]
               secondArray.push(polishName)
           }
         let dataToFile = openFileService.mapFile(secondArray);
-          openFileService.generateCsvFile(dataToFile).then(done=>console.log(done,'promise returned')).catch(e=>console.log(e.message));
+          openFileService.generateCsvFile(dataToFile).then(done=>{
+                    const pathToNewFile = openFileService.pathToNewFile;
+                    comService.send(ComList.infoMessage_4,`Plik został utworzony ścieżka do niego to: ${pathToNewFile}, liczba operacji to ${counter}`);
+            })
+            .catch(e=>console.log(e.message));
         return dataArray;
     }
 
