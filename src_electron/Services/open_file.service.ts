@@ -110,7 +110,6 @@ export class OpenFileService {
 
                //** This is mut record with trim etc.. */
                this.mutData2 =  this.convertRecord2(this.originalDataRecord2);
-               this.dataFileReadOk = true;
 
                store.save(key,{original:this.originalDataRecord2,mut:this.mutData2});
 

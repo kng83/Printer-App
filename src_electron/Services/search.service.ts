@@ -28,30 +28,42 @@ export class SearchService {
       let counter = 0;
 
       mut.forEach((logEl, index) => {
-        let omit = false;
-        for (let j = matchArr.length - 1; j >= 0; j--) {
-          if (matchArr[j][0].length == logEl.length) {
-            if (matchArr[j][0] == logEl) {
-              equalRows.push(matchArr[j][1]);
-              omit = true;
-              counter++;
-            }
-          }
-        }
-        if (!omit) {
-          for (let i = mut2.length - 1; i >= 0; i--) {
-            const mainFileEl = mut2[i];
-            if (mainFileEl.length == logEl.length) {
-              if (mainFileEl == logEl) {
-                equalRows.push(i);
-                matchArr.push([logEl, i]);
-                counter++;
-                break;
-              }
-            }
+        // let omit = false;
+        // for (let j = matchArr.length - 1; j >= 0; j--) {
+        //   if (matchArr[j][0].length == logEl.length) {
+        //     if (matchArr[j][0] == logEl) {
+        //       equalRows.push(matchArr[j][1]);
+        //       omit = true;
+        //       counter++;
+        //     }
+        //   }
+        // }
+       // if (!omit) {
+        //   for (let i = mut2.length - 1; i >= 0; i--) {
+        //     const mainFileEl = mut2[i];
+        //     if (mainFileEl.length == logEl.length) {
+        //       if (mainFileEl == logEl) {
+        //         equalRows.push(mut2.length-1 - i);
+        //         matchArr.push([logEl, i]);
+        //         counter++;
+        //         break;
+        //       }
+        //     }
+
+            for (let i = 0 ;i<mut2.length; i++) {
+                const mainFileEl = mut2[i];
+              //  if (mainFileEl.length == logEl.length) {
+                  if (mainFileEl == logEl) {
+                    equalRows.push(i);
+                    matchArr.push([logEl, i]);
+                    counter++;
+                    break;
+               //   }
+                }
+
             counter++;
           }
-        }
+      //  }//
       });
       console.log(counter, "row count");
       this.sendDataToAngular(this.menageData(equalRows, counter));
