@@ -114,6 +114,17 @@ export class OpenFileService {
         .catch(e =>console.log(e.message))
         
     }
+    public mapFile(data:string[][]){
+        return data.map(row => row.join(',')).join('\n')
+    }
+    public generateCsvFile(data:string){
+        let fileNamePosition = this.filePath.lastIndexOf('\\');
+        let pathToDir = this.filePath.slice(0,fileNamePosition);
+       // console.log(this.filePath,pathToDir,'    ',path.join(pathToDir,'out_data.txt'));
+       //fs.writeFile(path.join(pathToDir,'out_data.txt'),data,(err)=>console.log(err));
+        let csvFile = util.promisify(fs.writeFile);
+        return csvFile(path.join(pathToDir,'out_data.txt'),data)
+    }
 
 
 }

@@ -8,7 +8,7 @@ comService.on(ComList.sendToElectron, (event, content) => {
   console.log(content);
 })
 
-export const template: MenuItemConstructorOptions[] = [
+export const template: MenuItemConstructorOptions[] = [//
   {
     label: 'File',
     submenu: [
