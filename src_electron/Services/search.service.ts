@@ -26,45 +26,63 @@ export class SearchService {
       const equalRows: number[] = [];
       const matchArr: [string, number][] = [["", 0]];
       let counter = 0;
+      let counter2 = 0;
+      
 
       mut.forEach((logEl, index) => {
-        // let omit = false;
-        // for (let j = matchArr.length - 1; j >= 0; j--) {
-        //   if (matchArr[j][0].length == logEl.length) {
-        //     if (matchArr[j][0] == logEl) {
-        //       equalRows.push(matchArr[j][1]);
-        //       omit = true;
-        //       counter++;
-        //     }
-        //   }
-        // }
-       // if (!omit) {
-        //   for (let i = mut2.length - 1; i >= 0; i--) {
-        //     const mainFileEl = mut2[i];
-        //     if (mainFileEl.length == logEl.length) {
-        //       if (mainFileEl == logEl) {
-        //         equalRows.push(mut2.length-1 - i);
-        //         matchArr.push([logEl, i]);
-        //         counter++;
-        //         break;
-        //       }
-        //     }
+        let omit = false;
+        let checkSecond = false;
+        let checkThird = false;
 
-            for (let i = 0 ;i<mut2.length; i++) {
-                const mainFileEl = mut2[i];
-              //  if (mainFileEl.length == logEl.length) {
-                  if (mainFileEl == logEl) {
-                    equalRows.push(i);
-                    matchArr.push([logEl, i]);
-                    counter++;
-                    break;
-               //   }
-                }
-
+        for (let j = matchArr.length - 1; j >= 0; j--) {
+          if (matchArr[j][0].length == logEl.length) {
+            if (matchArr[j][0] == logEl) {
+              equalRows.push(matchArr[j][1]);
+              omit = true;
+              counter++;
+            }
+          }
+        }
+       if (!omit) {
+          for (let i = mut2.length - 1; i >= 0; i--) {
+            const mainFileEl = mut2[i];
+            if (mainFileEl.length === logEl.length) {
+              if (mainFileEl === logEl) {
+                equalRows.push(mut2.length-1 - i);
+                matchArr.push([logEl, i]);          
+                checkThird = true;
+                checkSecond = true;
+                counter++;
+                break;
+              }
+            }
             counter++;
           }
-      //  }//
+        //  checkSecond = true;
+          if(!checkSecond){
+            for (let i = mut2.length - 1; i >= 0; i--) {
+              const mainFileEl = mut2[i];  
+              let sMainFileEl = mainFileEl.slice(0,3);
+              let sLogEl = logEl.search(sMainFileEl);        
+                if (sLogEl==0) {
+                  equalRows.push(mut2.length-1 - i);        
+                  checkThird = true;
+                  counter++;
+                  break;
+                }
+              }//
+           
+          }
+
+          if(!checkThird){
+            equalRows.push(mut2.length-1)//
+            counter2++;
+            counter++
+          }
+        }
+       
       });
+      console.log(counter2,'false loop')
       console.log(counter, "row count");
       this.sendDataToAngular(this.menageData(equalRows, counter));
       setTimeout(() => {
@@ -75,20 +93,11 @@ export class SearchService {
 
   private menageData(listOfRows: number[], counter: number) {
     const original2 = storageService.load(LoadFile.firstFile).original;
+    const mut2 = storageService.load(LoadFile.firstFile).mut;
     const original = storageService.load(LoadFile.secondFile).original;
 
     let dataArray = [];
-    for (let i = 0; i < 10; i++) {
-      //  const time = original2[listOfRows[]]
-      const polishName = [
-        original[i][0],
-        original[i][4],
-        original2[listOfRows[i]][1],
-        original[i][1],
-        original[i][5]
-      ];
-      dataArray.push(polishName);
-    }
+ 
     let secondArray = [];
     for (let i = 0; i < listOfRows.length; i++) {
       //  const time = original2[listOfRows[]]
@@ -96,8 +105,9 @@ export class SearchService {
         original[i][0],
         original[i][4],
         original2[listOfRows[i]][1],
-        original[i][1],
-        original[i][5]
+      //  original[3],
+    //    original[i][1],
+    //    original[i][5]
       ];
       secondArray.push(polishName);
     }

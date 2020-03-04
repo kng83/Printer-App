@@ -52,36 +52,34 @@ export class OpenFileService {
         })
     }
     private convertRecord2(data:string[][]):string[]{
-              return  data.map(element=> element[0])           
+              return  data.map(element=> element[0].replace(/\s/g, ''))           
 
     }
 
     private convertRecord(data:string[][]):string[]{
         return data.map((element)=> {
+            //    console.log(element);
                 const len = element[3].length;
                 const elementInPickedColumn = element[3].slice(4,len);
-                   return elementInPickedColumn;
+                   return elementInPickedColumn.replace(/\s/g, '');
      
         });
     }
 
     public getData(key:string,store:StorageService) {
-        this.dataFileReadOk = false;
         return this.getDataFromFile().then(data => {
              this.convertCsvToArray(data).then(record => {
                  console.log(record.length,'length of log record');
-                this.originalDataRecord = record;
+                this.originalDataRecord = [...record];
 
                 //** This is mut record with trim etc.. */
                 this.mutData =  this.convertRecord(this.originalDataRecord);
-                this.dataFileReadOk = true;
-
                 store.save(key,{original:this.originalDataRecord,mut:this.mutData});
 
                 //**!!!!!!!!!! Na razie wyslij info stad */
-                if(key === LoadFile.secondFile){
-                    comService.send<string>(ComList.infoMessage_2,`Plik został zaladowny i sciezka to ${this.filePath}`);
-                }
+
+                comService.send<string>(ComList.infoMessage_2,`Plik został zaladowny i sciezka to ${this.filePath}`);
+             
 
                 }).catch(e => console.log(e.message,'getData'));
       
@@ -106,7 +104,7 @@ export class OpenFileService {
     public getDataDirectFromFile(key:string,store:StorageService){
         this.getDataDirect().then(data=>{
             this.convertCsvToArray(data).then(record => {
-               this.originalDataRecord2 = record;
+               this.originalDataRecord2 = [...record];
 
                //** This is mut record with trim etc.. */
                this.mutData2 =  this.convertRecord2(this.originalDataRecord2);
