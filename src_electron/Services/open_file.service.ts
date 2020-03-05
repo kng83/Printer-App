@@ -52,7 +52,7 @@ export class OpenFileService {
         })
     }
     private convertRecord2(data:string[][]):string[]{
-              return  data.map(element=> element[0].replace(/\s/g, ''))           
+              return  data.map(element=> element[0].trim())           
 
     }
 
@@ -60,8 +60,14 @@ export class OpenFileService {
         return data.map((element)=> {
             //    console.log(element);
                 const len = element[3].length;
-                const elementInPickedColumn = element[3].slice(4,len);
-                   return elementInPickedColumn.replace(/\s/g, '');
+                let elementInPickedColumn='';
+                if(element[3].slice(0,4)=="<AB>"){
+                     elementInPickedColumn = element[3].slice(4,len);
+                }
+                else{
+                    elementInPickedColumn = element[3];
+                }
+                   return elementInPickedColumn.trim();
      
         });
     }
@@ -78,12 +84,12 @@ export class OpenFileService {
 
                 //**!!!!!!!!!! Na razie wyslij info stad */
 
-                comService.send<string>(ComList.infoMessage_2,`Plik został zaladowny i sciezka to ${this.filePath}`);
+                comService.send<string>(ComList.infoMessage_2,`Plik został zaladowny i sciezka to ${this.filePath}`);//
              
 
                 }).catch(e => console.log(e.message,'getData'));
       
-        }).catch(console.log)
+        }).catch(console.log)//
     }
 
     private async getDataDirect(): Promise<Buffer> {

@@ -27,6 +27,7 @@ export class SearchService {
       const matchArr: [string, number][] = [["", 0]];
       let counter = 0;
       let counter2 = 0;
+      let notConvertedCounter =0;
       
 
       mut.forEach((logEl, index) => {
@@ -58,7 +59,7 @@ export class SearchService {
             }
             counter++;
           }
-        //  checkSecond = true;
+          checkSecond = true; //
           if(!checkSecond){
             for (let i = mut2.length - 1; i >= 0; i--) {
               const mainFileEl = mut2[i];  
@@ -75,23 +76,24 @@ export class SearchService {
           }
 
           if(!checkThird){
-            equalRows.push(mut2.length-1)//
+            equalRows.push(99999)
             counter2++;
             counter++
+            notConvertedCounter++;
           }
         }
        
       });
-      console.log(counter2,'false loop')
+      console.log(counter2,'false loop sa')
       console.log(counter, "row count");
-      this.sendDataToAngular(this.menageData(equalRows, counter));
+      this.sendDataToAngular(this.menageData(equalRows, counter,notConvertedCounter));
       setTimeout(() => {
         this.waitingToEnd = false;
       }, 5000);
     }); //
   }
 
-  private menageData(listOfRows: number[], counter: number) {
+  private menageData(listOfRows: number[], counter: number,notConvertedCounter:number) {
     const original2 = storageService.load(LoadFile.firstFile).original;
     const mut2 = storageService.load(LoadFile.firstFile).mut;
     const original = storageService.load(LoadFile.secondFile).original;
@@ -100,11 +102,17 @@ export class SearchService {
  
     let secondArray = [];
     for (let i = 0; i < listOfRows.length; i++) {
-      //  const time = original2[listOfRows[]]
+      let translated = '';
+      if(listOfRows[i] == 99999){
+        translated = original[i][0];
+      }else{
+        translated =  original2[listOfRows[i]][1];
+      }
+
       const polishName = [
         original[i][0],
         original[i][4],
-        original2[listOfRows[i]][1],
+        translated,
       //  original[3],
     //    original[i][1],
     //    original[i][5]
@@ -118,7 +126,7 @@ export class SearchService {
         const pathToNewFile = openFileService.pathToNewFile;
         comService.send(
           ComList.infoMessage_4,
-          `Plik został utworzony ścieżka do niego to: ${pathToNewFile}, liczba operacji to ${counter}`
+          `Plik został utworzony ścieżka do niego to: ${pathToNewFile}, liczba operacji to ${counter}, nie przetlumaczono ${notConvertedCounter} pozycji`
         );
       })
       .catch(e => console.log(e.message));
