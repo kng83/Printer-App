@@ -31,51 +31,35 @@ export class SearchService {
       
 
       mut.forEach((logEl, index) => {
-        let omit = false;
-        let checkSecond = false;
-        let checkThird = false;
+        let omitFirst = false;
+        let omitSecond = false;
 
         for (let j = matchArr.length - 1; j >= 0; j--) {
           if (matchArr[j][0].length == logEl.length) {
             if (matchArr[j][0] == logEl) {
               equalRows.push(matchArr[j][1]);
-              omit = true;
+              omitFirst = true;
               counter++;
             }
           }
         }
-       if (!omit) {
+
+       if (!omitFirst) {
           for (let i = mut2.length - 1; i >= 0; i--) {
             const mainFileEl = mut2[i];
             if (mainFileEl.length === logEl.length) {
               if (mainFileEl === logEl) {
-                equalRows.push(mut2.length-1 - i);
+                equalRows.push(i);
                 matchArr.push([logEl, i]);          
-                checkThird = true;
-                checkSecond = true;
+                omitSecond = true;
                 counter++;
                 break;
               }
             }
             counter++;
           }
-          checkSecond = true; //
-          if(!checkSecond){
-            for (let i = mut2.length - 1; i >= 0; i--) {
-              const mainFileEl = mut2[i];  
-              let sMainFileEl = mainFileEl.slice(0,3);
-              let sLogEl = logEl.search(sMainFileEl);        
-                if (sLogEl==0) {
-                  equalRows.push(mut2.length-1 - i);        
-                  checkThird = true;
-                  counter++;
-                  break;
-                }
-              }//
-           
-          }
 
-          if(!checkThird){
+          if(!omitSecond){
             equalRows.push(99999)
             counter2++;
             counter++
@@ -83,14 +67,14 @@ export class SearchService {
           }
         }
        
-      });
+      });//
       console.log(counter2,'false loop sa')
       console.log(counter, "row count");
       this.sendDataToAngular(this.menageData(equalRows, counter,notConvertedCounter));
       setTimeout(() => {
         this.waitingToEnd = false;
       }, 5000);
-    }); //
+    }); 
   }
 
   private menageData(listOfRows: number[], counter: number,notConvertedCounter:number) {
@@ -99,8 +83,9 @@ export class SearchService {
     const original = storageService.load(LoadFile.secondFile).original;
 
     let dataArray = [];
- 
     let secondArray = [];
+    let memoryLast = 999998;
+
     for (let i = 0; i < listOfRows.length; i++) {
       let translated = '';
       if(listOfRows[i] == 99999){
@@ -108,7 +93,7 @@ export class SearchService {
       }else{
         translated =  original2[listOfRows[i]][1];
       }
-
+//
       const polishName = [
         original[i][0],
         original[i][4],
@@ -117,8 +102,14 @@ export class SearchService {
     //    original[i][1],
     //    original[i][5]
       ];
-      secondArray.push(polishName);
+      
+      if(memoryLast !== listOfRows[i]){
+        secondArray.push(polishName);
+      }
+      memoryLast= listOfRows[i];
     }
+
+
     let dataToFile = openFileService.mapFile(secondArray);
     openFileService
       .generateCsvFile(dataToFile)
