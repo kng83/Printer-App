@@ -1,21 +1,44 @@
-
 <div>
-    <div class="card text-white bg-primary mb-1 w-100">
+  <div class="card text-white bg-primary mb-0 w-100">
+    <div class="card-body">
+      <h5 class="card-title text-center">Zaladuj plik</h5>
+      <p class="card-text text-center">{{textFromElectron_2}}</p>
+    </div>
+  </div>
+  <br>
+  <!-- <div *ngIf="showColumnPicker">
+    <button type="submit" class="btn btn-outline-primary" (click)="onSubmit()">Generuj Plik</button>
+  </div> -->
+  
+  <div *ngIf="showColumnPicker">
+    <div class="card text-white bg-primary mb-0 w-100">
       <div class="card-body">
-        <h5 class="card-title text-center">Zaladuj plik</h5>
-        <p class="card-text text-center">{{textFromElectron_2}}</p>
+        <h5 class="card-title text-center">Dodatkowe opcje</h5>
+        <!-- form is started here -->
+        <form #columnForm="ngForm" (ngSubmit)="onSubmit()">
+          <!-- <div class="form-group"> -->
+            <div class="checkbox">
+              <label class="form-check-label"><input type="checkbox" value="" [(ngModel)]="pickOptions.omitRepeatedValues" name="name">
+                Usuń powtarzające się wiersze</label>
+            </div>
+            <div class="checkbox">
+              <label class="form-check-label"><input type="checkbox" value="" [(ngModel)]="pickOptions.addGermanTranslation" name="name">
+                Dodaj oryginalne tlumaczenie niemieckie</label>
+            </div>
+            <div class="checkbox">
+              <label class="form-check-label"><input type="checkbox" value="" [(ngModel)]="pickOptions.addAdditionalInfo" name="name">
+                Dodaj dodatkowe kolumny</label>
+            </div>
+            <hr>
+            <div>
+              <button type="submit" class="btn btn-success" [disabled]="!columnForm.form.valid">Generuj Plik</button>
+            </div>
+          <!-- </div> -->
+        </form>
       </div>
     </div>
-    <br>
-  <div *ngIf="showColumnPicker">
-          <button type="submit" class="btn btn-outline-primary" (click)="onSubmit()">Generuj Plik</button>
   </div>
 
-  <!-- <div class="mb-0 w-75">
-    <img class="img-boobs" src="../../../assets/boobs.gif">
-  </div> -->
- 
-  <hr>
   <br>
   <div *ngIf="showMsgFileCreated">
     <div class="card text-white bg-warning mb-0 w-100">
@@ -23,12 +46,11 @@
         <h5 class="card-title text-center">Plik zostal wygenerowany</h5>
         <p class="card-text text-center">{{textFromElectron_4}}</p>
       </div>
-  </div>
+    </div>
 
-  <br>
-  <br>
-  <hr>
-  <!-- <div *ngIf="showTable">
+    <br>
+
+    <!-- <div *ngIf="showTable">
     <table class="table w-100 text-center">
       <tbody>
         <tr *ngFor="let row of rowsContent;index as i">

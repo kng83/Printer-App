@@ -84,6 +84,7 @@ try {
     createWindow()
     setTimeout(()=>{
       openFileService.getDataDirectFromFile(LoadFile.firstFile, storageService);
+      openFileService.getDataFromNiceFile(LoadFile.patternFile, storageService);
     },0)
 
   });

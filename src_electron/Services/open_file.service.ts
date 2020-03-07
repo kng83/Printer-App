@@ -16,8 +16,10 @@ export class OpenFileService {
     pathToNewFile:string;
     originalDataRecord:string[][];
     originalDataRecord2:string[][];
+    originalDataRecord3:string[][];
     mutData:string[];
     mutData2:string[];
+    mutData3:string[];
     dataFileReadOk:boolean = false;
 
     private async getFilePath(): Promise<string> {
@@ -31,11 +33,12 @@ export class OpenFileService {
 
     }
 
-    private async getDataFromFile(): Promise<Buffer> {
+    private async getDataFromFile(): Promise<Buffer | string> {
         try {
+            
             let pathToFile  = await this.getFilePath();
             const readFile = util.promisify(fs.readFile);
-            let data = await readFile(pathToFile)
+            let data = await readFile(pathToFile,'utf8')
             return data;
 
         } catch (e) {
@@ -43,14 +46,15 @@ export class OpenFileService {
         }
     }
 
-   private async convertCsvToArray(data:Buffer):Promise<string[][]>{
+   private async convertCsvToArray(data:Buffer | string):Promise<string[][]>{
         return new Promise((resolve,reject)=>{
-            csvParse(data,{columns:false,skip_lines_with_error:true},(err,record)=>{
+            csvParse(data,{columns:false,skip_lines_with_error:true,relax_column_count:true},(err,record)=>{
                 resolve(record);
                 reject(err);
             })
         })
     }
+    // For original file
     private convertRecord2(data:string[][]):string[]{
               return  data.map(element=> element[0].trim())           
 
@@ -82,9 +86,7 @@ export class OpenFileService {
                 this.mutData =  this.convertRecord(this.originalDataRecord);
                 store.save(key,{original:this.originalDataRecord,mut:this.mutData});
 
-                //**!!!!!!!!!! Na razie wyslij info stad */
-
-                comService.send<string>(ComList.infoMessage_2,`Plik został zaladowny i sciezka to ${this.filePath}`);//
+                comService.send<string>(ComList.infoMessage_2,`Plik został zaladowny i sciezka do niego to: ${this.filePath}`);//
              
 
                 }).catch(e => console.log(e.message,'getData'));
@@ -92,7 +94,25 @@ export class OpenFileService {
         }).catch(console.log)//
     }
 
-    private async getDataDirect(): Promise<Buffer> {
+    //**For file first in ansii conversion format */
+    private async getDataDirect(): Promise<Buffer | string> {
+        try {
+            let pathToFile  = path.join(__dirname,"../../src/assets/converted_super2.txt")
+            if(!serve){
+                pathToFile = path.join(__dirname,"../../dist/Printer-App/assets/converted_super2.txt")
+            }
+           
+            const readFile = util.promisify(fs.readFile);
+            let data = await readFile(pathToFile,'utf8')
+            return data;
+
+        } catch (e) {
+            return e
+        }
+    }
+
+       //**For file first in utf-8  conversion format */
+    private async getDataDirect2(): Promise<Buffer | string> {
         try {
             let pathToFile  = path.join(__dirname,"../../src/assets/data.csv")
             if(!serve){
@@ -100,13 +120,15 @@ export class OpenFileService {
             }
            
             const readFile = util.promisify(fs.readFile);
-            let data = await readFile(pathToFile)
+            let data = await readFile(pathToFile,'utf8')
             return data;
 
         } catch (e) {
             return e
         }
     }
+
+
     public getDataDirectFromFile(key:string,store:StorageService){
         this.getDataDirect().then(data=>{
             this.convertCsvToArray(data).then(record => {
@@ -121,8 +143,28 @@ export class OpenFileService {
         })
         
         .catch(e =>console.log(e.message))
-        
+      
     }
+
+    public getDataFromNiceFile(key:string,store:StorageService){
+        this.getDataDirect2().then(data=>{
+            this.convertCsvToArray(data).then(record => {
+               this.originalDataRecord3 = [...record];
+
+               //** This is mut record with trim etc.. */
+               this.mutData3 =  this.convertRecord2(this.originalDataRecord3);
+
+               store.save(key,{original:this.originalDataRecord3,mut:this.mutData3});
+
+               }).catch(e => console.log(e.message));
+        })
+        
+        .catch(e =>console.log(e.message))
+      
+    }
+
+
+
     public mapFile(data:string[][]){
         return data.map(row => row.join(', ')).join('\n')
     }
@@ -131,7 +173,7 @@ export class OpenFileService {
         let pathToDir = this.filePath.slice(0,fileNamePosition);
         let csvFile = util.promisify(fs.writeFile);
         this.pathToNewFile = path.join(pathToDir,'out_data.txt')
-        return csvFile(this.pathToNewFile,data)
+        return csvFile(this.pathToNewFile,data,'utf8')
     }
 
 

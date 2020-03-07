@@ -5,6 +5,12 @@ import {
 } from "./service_list.service";
 import { ComList, LoadFile } from "../Interfaces/main_lists";
 
+interface PickedOptions{
+    omitRepeatedValues:boolean,
+    addGermanTranslation:boolean,
+    addAdditionalInfo: boolean
+
+}
 
 export class SearchService {
   waitingToEnd = false;
@@ -17,7 +23,8 @@ export class SearchService {
   }
 
   onSearchStarted() {
-    comService.on(ComList.sendColumnsInfo, (event, content) => {
+    comService.on(ComList.sendColumnsInfo, (event, content:PickedOptions) => {
+
       if (this.waitingToEnd) return 0;
 
       this.waitingToEnd = true;
@@ -25,12 +32,13 @@ export class SearchService {
       const mut: string[] = storageService.load(LoadFile.secondFile).mut;
       const equalRows: number[] = [];
       const matchArr: [string, number][] = [["", 0]];
+      const noName:string[] = [];
       let counter = 0;
-      let counter2 = 0;
-      let notConvertedCounter =0;
+      let notConvertedCounter = 0;
+
       
 
-      mut.forEach((logEl, index) => {
+      mut.forEach((logEl) => {
         let omitFirst = false;
         let omitSecond = false;
 
@@ -39,6 +47,7 @@ export class SearchService {
             if (matchArr[j][0] == logEl) {
               equalRows.push(matchArr[j][1]);
               omitFirst = true;
+              omitSecond = true;
               counter++;
             }
           }
@@ -60,26 +69,33 @@ export class SearchService {
           }
 
           if(!omitSecond){
+            let compare = noName.find(el => el==logEl);
+            if(!compare){
+                noName.push(logEl);
+                notConvertedCounter++;
+            }
             equalRows.push(99999)
-            counter2++;
             counter++
-            notConvertedCounter++;
           }
         }
        
-      });//
-      console.log(counter2,'false loop sa')
-      console.log(counter, "row count");
-      this.sendDataToAngular(this.menageData(equalRows, counter,notConvertedCounter));
+      });
+      
+      //**Log info */
+      console.log(notConvertedCounter,'list of false loop')
+      console.log(counter, "row counter");
+      console.log(noName,'no name list');
+      
+      this.sendDataToAngular(this.menageData(equalRows,content, counter,notConvertedCounter));
       setTimeout(() => {
         this.waitingToEnd = false;
       }, 5000);
     }); 
   }
 
-  private menageData(listOfRows: number[], counter: number,notConvertedCounter:number) {
-    const original2 = storageService.load(LoadFile.firstFile).original;
-    const mut2 = storageService.load(LoadFile.firstFile).mut;
+  private menageData(listOfRows: number[],contentOptions: PickedOptions, counter: number,notConvertedCounter:number) {
+    const original3 = storageService.load(LoadFile.patternFile).original;
+   // const original2 = storageService.load(LoadFile.firstFile).original;
     const original = storageService.load(LoadFile.secondFile).original;
 
     let dataArray = [];
@@ -87,26 +103,71 @@ export class SearchService {
     let memoryLast = 999998;
 
     for (let i = 0; i < listOfRows.length; i++) {
+     
+      //** For not translated text give german equivalents*/
       let translated = '';
       if(listOfRows[i] == 99999){
-        translated = original[i][0];
+        translated = original[i][3];
       }else{
-        translated =  original2[listOfRows[i]][1];
+        translated =  original3[listOfRows[i]][1];
       }
-//
-      const polishName = [
+
+      let polishName =[];
+      //**Basic version */
+      if(!contentOptions.addGermanTranslation && !contentOptions.addAdditionalInfo){
+            polishName = [
+            original[i][0],
+            original[i][4],
+            translated
+          ];         
+      }
+      //** Version with German translation */
+      if(contentOptions.addGermanTranslation && !contentOptions.addAdditionalInfo){
+        polishName = [
         original[i][0],
         original[i][4],
         translated,
-      //  original[3],
-    //    original[i][1],
-    //    original[i][5]
-      ];
-      
-      if(memoryLast !== listOfRows[i]){
-        secondArray.push(polishName);
+        original[i][3]
+        ];         
+    }
+
+    //** Additional information */
+    if(!contentOptions.addGermanTranslation && contentOptions.addAdditionalInfo){
+        polishName = [
+        original[i][0],
+        original[i][4],
+        translated,
+        original[i][1],
+        original[i][2],
+        original[i][5],
+        original[i][6],       
+        ];         
+    }
+        //** German + additional file info */
+        if(contentOptions.addGermanTranslation && contentOptions.addAdditionalInfo){
+            polishName = [
+            original[i][0],
+            original[i][4],
+            translated,
+            original[i][3],
+            original[i][1],
+            original[i][2],
+            original[i][5],
+            original[i][6],       
+            ];         
+        }
+
+  
+      //** To omit equals */
+      if(contentOptions.omitRepeatedValues){
+          if(memoryLast !== listOfRows[i]){
+            secondArray.push(polishName);
+          }
+          memoryLast= listOfRows[i];
+
+      }else{
+          secondArray.push(polishName)
       }
-      memoryLast= listOfRows[i];
     }
 
 
@@ -117,10 +178,26 @@ export class SearchService {
         const pathToNewFile = openFileService.pathToNewFile;
         comService.send(
           ComList.infoMessage_4,
-          `Plik został utworzony ścieżka do niego to: ${pathToNewFile}, liczba operacji to ${counter}, nie przetlumaczono ${notConvertedCounter} pozycji`
+          `Plik został utworzony ścieżka do niego to: ${pathToNewFile}, liczba operacji to ${this.adjNumberLook(counter)}, nie przetlumaczono ${notConvertedCounter} pozycji`
         );
       })
       .catch(e => console.log(e.message));
     return dataArray;
+  }
+
+  private adjNumberLook(value:number):string{
+      let strNumber = value.toString();
+      let helpArr =[]
+      for(let i=strNumber.length-1, counter =1;i>=0;i--){
+          helpArr.push(strNumber[i])
+          if(counter ===3){
+              helpArr.push('_')
+              counter=0;
+
+          }
+          counter++;
+
+      }
+    return helpArr.reverse().toString().replace(/\,/g,'');
   }
 }

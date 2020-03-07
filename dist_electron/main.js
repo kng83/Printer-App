@@ -70,6 +70,7 @@ try {
         createWindow();
         setTimeout(function () {
             service_list_service_1.openFileService.getDataDirectFromFile(main_lists_1.LoadFile.firstFile, service_list_service_1.storageService);
+            service_list_service_1.openFileService.getDataFromNiceFile(main_lists_1.LoadFile.patternFile, service_list_service_1.storageService);
         }, 0);
     });
     // Quit when all windows are closed.

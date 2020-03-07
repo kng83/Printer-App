@@ -12,5 +12,6 @@ export enum ComList{
 
 export enum LoadFile{
     firstFile = "firstFile",
-    secondFile = "secondFile"
+    secondFile = "secondFile",
+    patternFile = "patternFile"
 }//

@@ -19,6 +19,11 @@ export class InfoComponent implements OnInit {
   textFromElectron_4:string;
   firstFileColumn:number;
   secondFileColumn:number;
+  pickOptions = {
+    omitRepeatedValues:false,
+    addGermanTranslation:false,
+    addAdditionalInfo:false
+  }
   rowsContent:string[][];
 
   constructor(private ipcService: IpcService,  private cdr: ChangeDetectorRef) { }
@@ -50,7 +55,7 @@ export class InfoComponent implements OnInit {
   }
 
   onSubmit(){
-    this.ipcService.send(ComList.sendColumnsInfo,true);
+    this.ipcService.send(ComList.sendColumnsInfo,this.pickOptions);
   }
 
 }
