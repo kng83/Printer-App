@@ -7,6 +7,7 @@ import { ComList, LoadFile } from "../Interfaces/main_lists";
 
 interface PickedOptions{
     omitRepeatedValues:boolean,
+    sorting:boolean,
     addGermanTranslation:boolean,
     addAdditionalInfo: boolean
 
@@ -23,18 +24,26 @@ export class SearchService {
   }
 
   onSearchStarted() {
-    comService.on(ComList.sendColumnsInfo, (event, content:PickedOptions) => {
+    comService.on(ComList.sendColumnsInfo, (event, contentOptions:PickedOptions) => {
 
       if (this.waitingToEnd) return 0;
 
       this.waitingToEnd = true;
       const mut2: string[] = storageService.load(LoadFile.firstFile).mut;
-      const mut: string[] = storageService.load(LoadFile.secondFile).mut;
+      let mut: string[]=[];
       const equalRows: number[] = [];
       const matchArr: [string, number][] = [["", 0]];
       const noName:string[] = [];
       let counter = 0;
       let notConvertedCounter = 0;
+
+      let sorted:boolean = true;
+
+      if(!contentOptions.sorting){
+        mut = storageService.load(LoadFile.secondFile).mut;
+      }else{
+        mut = storageService.load(LoadFile.secondFile).mutDataSorted;
+      }
 
       
 
@@ -86,7 +95,7 @@ export class SearchService {
       console.log(counter, "row counter");
       console.log(noName,'no name list');
       
-      this.sendDataToAngular(this.menageData(equalRows,content, counter,notConvertedCounter));
+      this.sendDataToAngular(this.menageData(equalRows,contentOptions, counter,notConvertedCounter));
       setTimeout(() => {
         this.waitingToEnd = false;
       }, 5000);
@@ -95,8 +104,18 @@ export class SearchService {
 
   private menageData(listOfRows: number[],contentOptions: PickedOptions, counter: number,notConvertedCounter:number) {
     const original3 = storageService.load(LoadFile.patternFile).original;
-   // const original2 = storageService.load(LoadFile.firstFile).original;
-    const original = storageService.load(LoadFile.secondFile).original;
+    let  original:string[] = [];
+
+    
+
+    if(!contentOptions.sorting){
+      original = storageService.load(LoadFile.secondFile).original;
+    }else{
+      original = storageService.load(LoadFile.secondFile).originalSorted
+    }
+
+
+    
 
     let dataArray = [];
     let secondArray = [];

@@ -21,8 +21,9 @@ export class InfoComponent implements OnInit {
   secondFileColumn:number;
   pickOptions = {
     omitRepeatedValues:false,
+    sorting:false,
     addGermanTranslation:false,
-    addAdditionalInfo:false
+    addAdditionalInfo:false,//
   }
   rowsContent:string[][];
 

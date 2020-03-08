@@ -15,9 +15,11 @@ export class OpenFileService {
     filePath: string;
     pathToNewFile:string;
     originalDataRecord:string[][];
+    originalDataRecordSorted:string[][]
     originalDataRecord2:string[][];
     originalDataRecord3:string[][];
     mutData:string[];
+    mutDataSorted:string[];
     mutData2:string[];
     mutData3:string[];
     dataFileReadOk:boolean = false;
@@ -60,6 +62,8 @@ export class OpenFileService {
 
     }
 
+
+
     private convertRecord(data:string[][]):string[]{
         return data.map((element)=> {
             //    console.log(element);
@@ -76,15 +80,31 @@ export class OpenFileService {
         });
     }
 
+    //** Sorting function */
+    private sortFn(a,b){
+        if (parseInt(a[0]) === parseInt(b[0])) {
+            return 0;
+        }
+        else {
+            return (parseInt(a[0]) > parseInt(b[0])) ? -1 : 1;
+        }
+    }
+
+    private sortRecord(data:string[][]):string[][]{
+        return data.sort(this.sortFn);
+    }
+
     public getData(key:string,store:StorageService) {
         return this.getDataFromFile().then(data => {
              this.convertCsvToArray(data).then(record => {
                  console.log(record.length,'length of log record');
                 this.originalDataRecord = [...record];
+                this.originalDataRecordSorted = this.sortRecord([...record]);
 
-                //** This is mut record with trim etc.. */
+                //**  This is mut record with trim etc.. */
                 this.mutData =  this.convertRecord(this.originalDataRecord);
-                store.save(key,{original:this.originalDataRecord,mut:this.mutData});
+                this.mutDataSorted = this.convertRecord(this.sortRecord(this.originalDataRecordSorted))
+                store.save(key,{original:this.originalDataRecord,mut:this.mutData, originalSorted:this.originalDataRecordSorted, mutDataSorted:this.mutDataSorted});
 
                 comService.send<string>(ComList.infoMessage_2,`Plik został zaladowny i sciezka do niego to: ${this.filePath}`);//
              
