@@ -1,0 +1,12 @@
+<div>
+    <div class="jumbotron">
+    <form class="form-group row" [formGroup]="profileForm">
+        <label class="text-success col-sm-4 col-form-label">Liczba {{firstNumber}} x {{secondNumber}} =</label>
+        <input class="form-control col-sm-4" size="2" type="text" formControlName="typedAnswer" >
+         <button class="btn btn-outline-primary" (click)="onSubmit()">Sprawdz</button>
+    </form>
+    <div *ngIf="ok===0"><p class="text-primary">Oczekiwanie na wynik</div>
+    <div *ngIf="ok===1"><p class="text-success">Brawo dobra odpowiedz</div>
+    <div *ngIf="ok===2"><p class="text-danger">Przykro mi poprawna odpowiedz to: {{answer}}</div>
+</div>
+</div>

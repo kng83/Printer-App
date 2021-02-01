@@ -3,18 +3,22 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { InfoComponent } from './components/info/info.component';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
+import {CounterComponent} from './components/counter/counter.component';
+
 //import { IpcService } from './services/ipc.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    InfoComponent
+    InfoComponent,
+    CounterComponent
 
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

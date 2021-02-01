@@ -12,7 +12,8 @@ export const template: MenuItemConstructorOptions[] = [
   {
     label: 'Plik',
     submenu: [
-    //  { role: 'services', type: 'normal', label: 'Open File...', click: () => openFileService.getData(LoadFile.firstFile, storageService) },
-      { role: 'services', type: 'normal', label: 'Otwórz plik', click: () => openFileService.getData(LoadFile.secondFile, storageService) }]
+    //  { role: 'services', type: 'normal', label: 'Otwórz plik', click: () => openFileService.getData(LoadFile.secondFile, storageService) },
+      {role: 'about', type: 'normal', label: 'O aplikacji', click: () => console.log('about clicked')}
+    ]
   }
 ]
