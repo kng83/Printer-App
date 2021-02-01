@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.win = exports.serve = void 0;
 var electron_1 = require("electron");
 var menu_template_1 = require("./Main_Bar/menu_template");
 var path = require("path");
