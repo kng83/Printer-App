@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import {from} from 'rxjs';
-import { BehaviorSubject,pipe} from "rxjs";
-import{map,takeLast,first,last} from "rxjs/operators"
+import { BehaviorSubject} from "rxjs";
+import{first} from "rxjs/operators"
 
 
 type PairMul = [firstNumber: number, secondNumber: number, answer: number];
@@ -32,18 +31,7 @@ export class MathService {
   addScore(){
     this.$score.pipe(first()).subscribe(score =>{
       this.$score.next(score+1);
-    })//.subscribe(score => this.score = score)
+    })
   }
 
-
-  getLives(){
-    return this.$lives
-  }
-
-  getScore(){
-    //return of(this.score);
-    return this.$score
-  }
 }
-
-//
