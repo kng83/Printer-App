@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { InfoComponent } from './components/info/info.component';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import {CounterComponent} from './components/counter/counter.component';
+import { MessageComponent } from './components/message/message.component';
 
 //import { IpcService } from './services/ipc.service';
 
@@ -12,7 +13,8 @@ import {CounterComponent} from './components/counter/counter.component';
   declarations: [
     AppComponent,
     InfoComponent,
-    CounterComponent
+    CounterComponent,
+    MessageComponent
 
   ],
   imports: [
