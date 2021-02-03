@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MathService } from 'src/app/services/math.service';
-import {FormGroup,FormControl} from '@angular/forms'
-import { pipe } from 'rxjs';
+import { FormGroup, FormControl } from '@angular/forms'
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-counter',
@@ -10,48 +10,38 @@ import { pipe } from 'rxjs';
 })
 export class CounterComponent implements OnInit {
 
-    firstNumber:number;
-    secondNumber:number;
-    answer:number;
-    ok=0;
-    gameOver:boolean = false;
-    
+    firstNumber: number;
+    secondNumber: number;
+    answer: number;
+    ok = 0;
+    gameOver: Observable<boolean>// = false;
+
     profileForm = new FormGroup({
         typedAnswer: new FormControl(''),
-        
+
     });
-    
-    constructor(private mathService :MathService){}
-    
+
+    constructor(private mathService: MathService) { }
+
     ngOnInit() {
-        [this.firstNumber, this.secondNumber, this.answer ] = this.mathService.getPairOfMul();
+        [this.firstNumber, this.secondNumber, this.answer] = this.mathService.getPairOfMul();
+        this.gameOver = this.mathService.checkGame();
     }
 
-    onSubmit(){
-      if(this.ok > 0) return 0;
-      if(parseInt(this.profileForm.value.typedAnswer) === this.answer){
-        
-          this.ok = 1;
-          this.mathService.addScore()
-      }else{
-          this.ok = 2;
-          this.mathService.removeLives()
-      }
+    onSubmit() {
+        if (this.ok > 0) return 0;
+        if (parseInt(this.profileForm.value.typedAnswer) === this.answer) {
 
-      this.mathService.$lives.subscribe(lives =>{
-          if(lives < 0){
-              this.mathService.$lives.next(0)
-              this.gameOver = true;
-              setTimeout(() => {
-                  this.gameOver = false;
-                  this.mathService.$lives.next(3)
-                  this.mathService.$score.next(0);
-              }, 3000);
-          }
-      })
+            this.ok = 1;
+            this.mathService.addScore()
+        } else {
+            this.ok = 2;
+            this.mathService.removeLives()
+        }
+        this.gameOver = this.mathService.checkGame();
     }
 
-    message(){
+    message() {
         this.ok = 0;
         this.ngOnInit();
         this.profileForm.reset()

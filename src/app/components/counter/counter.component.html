@@ -13,7 +13,7 @@
             <p class="text-danger">Przykro mi zła odpowiedz. Poprawna odpowiedz to {{firstNumber}} x {{secondNumber}}={{answer}}</p>
         </message>
 
-        <message *ngIf="gameOver" [header]="'Info'" (close)="message()">
+        <message *ngIf="gameOver | async" [header]="'Info'" (close)="message()">
             <p class="text-danger">KONIEC GRY</p>
         </message>
     </div>
